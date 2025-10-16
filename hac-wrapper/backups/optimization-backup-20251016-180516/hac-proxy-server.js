@@ -2,21 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import compression from 'compression';
-import { LRUCache } from 'lru-cache';
 
 const app = express();
-
-// Enable compression
-app.use(compression({
-  filter: (req, res) => {
-    if (req.headers['x-no-compression']) {
-      return false;
-    }
-    return compression.filter(req, res);
-  },
-  level: 6 // Compression level (0-9, 6 is good balance)
-}));
 
 // CORS Configuration
 app.use(cors({
@@ -37,21 +24,6 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 const PORT = 3001;
-
-// ==========================================
-// CACHING SETUP
-// ==========================================
-const cache = new LRUCache({
-  max: 500, // Maximum 500 items in cache
-  ttl: 1000 * 60 * 5, // 5 minutes TTL
-  updateAgeOnGet: true,
-  updateAgeOnHas: false,
-});
-
-// Cache key generator
-function getCacheKey(type, user, ...params) {
-  return `${type}:${user}:${params.join(':')}`;
-}
 
 class ETHSHACScraper {
   constructor(hacUrl, username, password) {
@@ -81,6 +53,7 @@ class ETHSHACScraper {
 
   async login() {
     try {
+      console.log('  🔐 Logging in...');
       const loginUrl = `${this.hacUrl}HomeAccess/Account/LogOn`;
       
       const loginPageResponse = await axios.get(loginUrl, {
@@ -132,6 +105,7 @@ class ETHSHACScraper {
         this.parseCookies(redirectResponse.headers['set-cookie']);
       }
       
+      console.log('  ✅ Login successful!');
       return true;
     } catch (error) {
       console.error('  💥 Login error:', error.message);
@@ -150,6 +124,7 @@ class ETHSHACScraper {
     });
     const $ = cheerio.load(response.data);
     const name = $('.sg-banner-menu-element.sg-menu-element-identity span').first().text().trim();
+    console.log('  📝 Name:', name);
     return { name: name || 'Student' };
   }
 
@@ -217,6 +192,7 @@ class ETHSHACScraper {
       });
     });
 
+    console.log(`  📚 Total: ${classes.length} classes`);
     return classes;
   }
 
@@ -226,6 +202,8 @@ class ETHSHACScraper {
     }
 
     try {
+      console.log(`  📊 Fetching grades for: "${className}" (Q${markingPeriod})`);
+      
       const weekViewUrl = `${this.hacUrl}HomeAccess/Home/WeekView`;
       const weekViewResponse = await axios.get(weekViewUrl, {
         headers: { 
@@ -252,6 +230,8 @@ class ETHSHACScraper {
         const normalizedSearch = className.replace(/\s+/g, ' ').trim();
         
         if (normalizedFound === normalizedSearch) {
+          console.log(`  ✓ Found matching class: "${foundClassName}"`);
+          
           const $secondCell = cells.eq(1);
           const $gradeLink = $secondCell.find('a.sg-font-larger-average');
           const gradeHref = $gradeLink.attr('href') || '';
@@ -260,12 +240,14 @@ class ETHSHACScraper {
           
           if (match) {
             sectionKey = match[1];
+            console.log(`  🔑 Found section key: ${sectionKey}`);
             return false;
           }
         }
       });
 
       if (!sectionKey) {
+        console.log(`  ❌ Could not find section key for "${className}"`);
         return { 
           className,
           teacher: '',
@@ -279,7 +261,11 @@ class ETHSHACScraper {
         };
       }
 
+      console.log(`  🔑 Using section key: ${sectionKey}, Q${markingPeriod}`);
+
       const assignmentsUrl = `${this.hacUrl}HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx?section_key=${sectionKey}&course_session=1&RC_RUN=${markingPeriod}&MARK_TITLE=MP&MARK_TYPE=MP&SLOT_INDEX=${markingPeriod}`;
+      
+      console.log(`  🔗 Fetching: ${assignmentsUrl}`);
       
       const assignmentsResponse = await axios.get(assignmentsUrl, {
         headers: { 
@@ -296,8 +282,11 @@ class ETHSHACScraper {
       const average = avgMatch ? avgMatch[1] + '%' : 'N/A';
       const lastUpdated = $('.lastupdated').text().trim();
 
+      console.log(`  📝 Class: "${classTitle}" | Avg: ${average} | Updated: ${lastUpdated}`);
+
       const assignments = [];
       const assignmentRows = $('table.sg-asp-table tbody tr.sg-asp-table-data-row');
+      console.log(`  📋 Found ${assignmentRows.length} assignment rows`);
       
       assignmentRows.each((i, row) => {
         const $row = $(row);
@@ -324,6 +313,7 @@ class ETHSHACScraper {
 
       const categories = [];
       const categoryRows = $('#plnMain_rptAssigmnetsByCourse_dgCourseCategories_0 tbody tr.sg-asp-table-data-row');
+      console.log(`  📂 Found ${categoryRows.length} category rows`);
       
       categoryRows.each((i, row) => {
         const $row = $(row);
@@ -338,6 +328,8 @@ class ETHSHACScraper {
           });
         }
       });
+
+      console.log(`  ✅ Returning: ${assignments.length} assignments, ${categories.length} categories`);
 
       return {
         className: classTitle || className,
@@ -367,26 +359,14 @@ class ETHSHACScraper {
   }
 }
 
-// ==========================================
-// API ENDPOINTS WITH CACHING
-// ==========================================
-
 app.post('/api/name', async (req, res) => {
   try {
     const { link, user, pass } = req.body;
     if (!link || !user || !pass) return res.status(400).json({ error: 'Missing parameters' });
-    
-    const cacheKey = getCacheKey('name', user);
-    const cached = cache.get(cacheKey);
-    if (cached) {
-      console.log(`  ⚡ Cache hit: name for ${user}`);
-      return res.json(cached);
-    }
-    
+    console.log(`\n📝 POST /api/name - User: ${user}`);
     const scraper = new ETHSHACScraper(link, user, pass);
     const result = await scraper.getStudentName();
-    
-    cache.set(cacheKey, result);
+    console.log(`   Result: ${result.name}\n`);
     res.json(result);
   } catch (error) {
     console.error('💥', error.message);
@@ -398,18 +378,10 @@ app.post('/api/classaverage', async (req, res) => {
   try {
     const { link, user, pass } = req.body;
     if (!link || !user || !pass) return res.status(400).json({ error: 'Missing parameters' });
-    
-    const cacheKey = getCacheKey('classes', user);
-    const cached = cache.get(cacheKey);
-    if (cached) {
-      console.log(`  ⚡ Cache hit: classes for ${user}`);
-      return res.json(cached);
-    }
-    
+    console.log(`\n📚 POST /api/classaverage - User: ${user}`);
     const scraper = new ETHSHACScraper(link, user, pass);
     const result = await scraper.getClassAverages();
-    
-    cache.set(cacheKey, result);
+    console.log(`   Returning ${result.length} classes\n`);
     res.json(result);
   } catch (error) {
     console.error('💥', error.message);
@@ -423,18 +395,10 @@ app.post('/api/classgrade', async (req, res) => {
     if (!link || !user || !pass || !className) {
       return res.status(400).json({ error: 'Missing parameters' });
     }
-    
-    const cacheKey = getCacheKey('grade', user, className, markingPeriod);
-    const cached = cache.get(cacheKey);
-    if (cached) {
-      console.log(`  ⚡ Cache hit: ${className} Q${markingPeriod}`);
-      return res.json(cached);
-    }
-    
+    console.log(`\n📊 POST /api/classgrade - Class: ${className}, Q${markingPeriod}`);
     const scraper = new ETHSHACScraper(link, user, pass);
     const result = await scraper.getClassGrades(className, markingPeriod);
-    
-    cache.set(cacheKey, result);
+    console.log(`   Returning class details\n`);
     res.json(result);
   } catch (error) {
     console.error('💥', error.message);
@@ -444,26 +408,19 @@ app.post('/api/classgrade', async (req, res) => {
 
 app.get('/', (req, res) => {
   res.json({ 
-    status: 'ETHS HAC Proxy - OPTIMIZED ⚡', 
-    version: '8.0 (Caching + Compression)',
-    features: ['Server-side caching', 'Gzip compression', 'LRU cache']
+    status: 'ETHS HAC Proxy - SECURE ✅', 
+    version: '7.0 (Marking Period Support)',
+    security: 'Credentials sent in request body, not URL'
   });
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'Proxy server is healthy ✅',
-    cache: {
-      size: cache.size,
-      max: cache.max
-    }
-  });
+  res.json({ status: 'Proxy server is healthy ✅' });
 });
 
 app.listen(PORT, () => {
-  console.log(`\n⚡ ETHS HAC Proxy v8.0 - OPTIMIZED`);
+  console.log(`\n🔒 ETHS HAC Proxy v7.0 - MARKING PERIOD SUPPORT`);
   console.log(`📍 http://localhost:${PORT}`);
-  console.log(`✅ Compression: Enabled`);
-  console.log(`✅ Caching: LRU (5 min TTL)`);
-  console.log(`✅ Max cache size: 500 items\n`);
+  console.log(`✅ Using POST requests (credentials in body, NOT in URL)`);
+  console.log(`✅ Quarter switching enabled (Q1, Q2, Q3, Q4)\n`);
 });
