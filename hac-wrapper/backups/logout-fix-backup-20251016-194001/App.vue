@@ -185,17 +185,7 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = markingPeriod
   
-  // CRITICAL FIX: Always reset originalClassName when opening a new class modal
-  // This ensures we use the SHORT class name from the class list
-  if (!showClassModal.value || !originalClassName.value) {
-    originalClassName.value = className
-  }
-  
-  // When switching quarters, use the stored original name
-  if (markingPeriod !== 1 && originalClassName.value) {
-    className = originalClassName.value
-  } else {
-    // First time opening this class, store it
+  if (markingPeriod === 1 || !originalClassName.value) {
     originalClassName.value = className
   }
 
@@ -210,7 +200,7 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
         link: hacUrl.value,
         user: username.value,
         pass: password.value,
-        class: className, // Use the short name
+        class: originalClassName.value,
         markingPeriod: markingPeriod
       })
     })
@@ -220,7 +210,6 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
     }
 
     const data = await response.json()
-    console.log('📊 Class details loaded:', data.className, 'Q' + markingPeriod)
     
     selectedClassDetails.value = {
       className: data.className || className,
@@ -250,25 +239,16 @@ function closeClassModal() {
   showClassModal.value = false
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
-  originalClassName.value = '' // Reset for next time
+  originalClassName.value = ''
 }
 
 function logout() {
-  // CRITICAL FIX: Reset ALL state when logging out
   isLoggedIn.value = false
   studentName.value = ''
   classes.value = []
   password.value = ''
   debugInfo.value = ''
   error.value = ''
-  
-  // Reset modal state
-  showClassModal.value = false
-  selectedClassDetails.value = null
-  selectedMarkingPeriod.value = 1
-  originalClassName.value = '' // IMPORTANT: Clear this on logout!
-  
-  console.log('✅ Logged out - all state cleared')
 }
 
 function getGradeColor(average: number): string {
