@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        
+    
+    
+
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <title>Home View Summary</title>
+        
+
+        <!-- 3rd party CSS our globals override -->
+<link  href="/HomeAccess/Stylesheets/Themes/Base/css?v=tw0njYZqSOVYHn_D3DhCDTytd6fBWpHQgVTAo5eiREQ1" type="text/css" rel="stylesheet" />
+<link  href="/HomeAccess/Stylesheets/SunGard/sungard-font-awesome.css" type="text/css" rel="stylesheet" />
+
+        <link  href="/HomeAccess/Stylesheets/Trirand/ui.jqgrid.css" type="text/css" rel="stylesheet" />
+
+    
+        <!-- Our globals -->
+        <link  href="/HomeAccess/eSchoolPLUSResource/GetEmbeddedStyle?file=CrossSite" type="text/css" rel="stylesheet" />
+
+        <link  href="/HomeAccess/Stylesheets/Site.css" type="text/css" rel="stylesheet" />
+
+        <link href="/HomeAccess/Media/Themes/Base/Common/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+        <!-- Our shared -->
+        <link  href="/HomeAccess/eSchoolPLUSResource/GetEmbeddedStyle?file=ComboBox" type="text/css" rel="stylesheet" />
+
+        <link  href="/HomeAccess/Stylesheets/Common/Navigation.css" type="text/css" rel="stylesheet" />
+
+        <link  href="/HomeAccess/Stylesheets/Common/font-awesome.css" type="text/css" rel="stylesheet" />
+
+    
+        <!-- JS -->
+        
+    <link  href="/HomeAccess/Stylesheets/Frame/Frame?v=55RUvMo26oV-2EIosM3TL5BiLxNJOlGs7SN-yQzztWM1" type="text/css" rel="stylesheet" />
+
+<link href="/HomeAccess/eSchoolPLUSResource/GetEmbeddedStyle?file=SessionTracking" rel="stylesheet" />
+    
+    
+
+
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/libs/modernizr-2.8.3.js"></script>
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Common/BrowserTest.js"></script>
+
+        <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+            if (!BrowserTest()) {
+                document.location = '/HomeAccess/' + 'BrowserReject'; // Done because browsers that vail won't support jQuery
+            }
+        </script>
+            
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/libs/jquery?v=qIcuP3UP_aRnf7YSojJ0X96urcPMuU40OLTAhIFZUhU1"></script>
+
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Trirand/ui.multiselect.js"></script>
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Trirand/i18n/grid.locale-en.js"></script>
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Trirand/jquery.jqGrid.js"></script>
+
+
+
+        <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=SungardCommon" type="text/javascript"></script>
+        <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=Combobox" type="text/javascript"></script>
+
+        <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Common/HAC.js"></script>
+
+        <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+            $(function () {
+                    parseForComboBoxes();
+
+                SunGard.Hac.Area('');
+                SunGard.Hac.Controller('Home');
+                SunGard.Hac.Action('WeekView');
+
+                SunGard.Common.Init('/HomeAccess/');
+                SunGard.Hac.Init('/HomeAccess/');
+            });
+        </script>
+   
+        <!-- Gainsights Logic -->
+            <!-- Gainsight PX Tag-->
+            <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+                        (function (n, t, a, e, co) {
+                            var i = "aptrinsic"; n[i] = n[i] || function () {
+                                (n[i].q = n[i].q || []).push(arguments)
+                            }, n[i].p = e; n[i].c = co;
+                            var r = t.createElement("script"); r.async = !0, r.src = a + "?a=" + e;
+                            var c = t.getElementsByTagName("script")[0]; c.parentNode.insertBefore(r, c)
+                        })(window, document, "https://web-sdk-us2.aptrinsic.com/api/aptrinsic.js", "AP-YDUVDTYHCH0C-2" + '');
+            </script>
+            <!-- Gainsight PX Tag-->
+                <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+                    //Make Identify Call:
+                    aptrinsic("identify",
+                        {
+                            //User Fields
+                            "id": 'ESP-HAC-' + 'dc6bdeeb86853ac2bccae20722c576f498337030dfa693779cd4fbe845735065',
+                            "role": 'Student'
+                        },
+                        {
+                            //Account Fields
+                            "id": '2029974842', // need to get district id
+                            "name": 'Evanston Twp. H.S. District 202',
+                            "siteCode": 'EVA',
+                            "productVersion": '21_4',
+                            "stateCode": ''
+                        });
+                </script>
+
+        <!-- This should be at the bottom of this section -->
+        
+    <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=SungardCommon" type="text/javascript"></script>
+    <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Frame/Frame?v=1u9U5AXsn-Es4rBPNTMVm2UiMdW1xGOw3HiHDq7e3hk1"></script>
+
+    <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=SessionTracking" type="text/javascript"></script>
+
+    <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ">
+        $(function() {
+            var timeout = 1200;
+            var expireAfter = 1198.9685981;
+            var showBefore = 120;
+            var redirectUrl = "/HomeAccess/Account/TimedOut";
+            var settingsOverride = {
+                captionText: null,
+                renewText: null,
+                ignoreText: null
+            };
+
+            SunGard.Common.SessionTracking.Init(timeout, expireAfter, showBefore, redirectUrl, settingsOverride);
+        });
+    </script>
+
+    <style >
+        .sg-asp-table th,
+        .sg-asp-table-header-row,
+        .sg-banner-logo-color,
+        .sg-hac-submenu,
+        .ui-jqgrid-view .ui-jqgrid-hdiv,
+        .ui-jqgrid tr.ui-jqgrid-labels th  { /* asp datatables dont produce th elements, only td. Use this class to index the header rows */
+            background-color: #1a2741  ;
+            color: #ff5a00  
+        }
+        .sg-asp-table-header-row a,
+        .sg-banner-text-color {
+            color: #ff5a00  
+        }
+    </style>
+
+    <!-- This should be at the bottom of this section -->
+    
+    <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ">
+        $(SunGard.Hac.Frame.Init);
+        $(function() {
+            var helpUrl = '/HomeAccess/HelpTAC/Default.htm';
+            SunGard.Hac.Frame.Banner.Init();
+        });
+    </script>
+
+    <!-- This should be at the bottom of this section -->
+    
+    <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/libs/bootstrap-popover.js"></script>
+
+    <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/SunGard/SunGard.Common.Html.js"></script>
+
+    <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Common/SunGard.Hac.SharedClasswork.js"></script>
+
+    <script type="text/javascript" nonce="uEx4sw0+mXAvr0UzspNfUpUZ" src="/HomeAccess/Scripts/Home/Home?v=n1OAKTR-gsNxG80che5A2Rn-4bKpYvm3ONCJwif1oa01"></script>
+
+
+    <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+        $(function () {
+            SunGard.Hac.Home.Init();
+        });
+    </script>
+    <link  href="/HomeAccess/Stylesheets/Common/bootstrap-popover.css" type="text/css" rel="stylesheet" />
+
+    <link  href="/HomeAccess/Stylesheets/Home/HomeStyle.css" type="text/css" rel="stylesheet" />
+
+
+
+
+    </head>
+    <!-- add webkit-overflow to fix scrolling on IOS Devices-->
+    <body style="-webkit-overflow-scrolling: touch;">
+        
+
+
+
+
+
+
+    <div class="sg-main-header">
+        
+
+
+
+
+<div class="sg-banner sg-banner-logo-color" data-contact-id="82102" data-student-id="822991">
+
+
+ <img src="https://www.eths.k12.il.us/cms/lib/IL01903927/Centricity/Domain/4/ETHS_SchoolSeal_Stacked_Blocks.jpg" alt="Evanston Twp. H.S. District 202" class="sg-banner-left"  /> 
+
+    <div class="sg-banner-right">
+        <div class="sg-banner-menu-container">
+            <div class="sg-banner-menu-left"></div>
+            <ul class="sg-banner-menu">
+                <li class="sg-banner-menu-element sg-menu-element-identity">
+                    <span>Swapnanil Das Gupta</span>
+                    <ul class="sg-banner-submenu">
+                            <li><a href="/HomeAccess/Account/Alerts">My Alerts</a></li>
+                        <li><a href="/HomeAccess/Account/Details">My Account</a></li>
+                    </ul>
+                </li>
+
+                    <li class="sg-banner-menu-divider"></li>
+                    <li class="sg-banner-menu-element sg-menu-element-help"><a href="http://www.eths.k12.il.us/cms/lib8/IL01903927/Centricity/Domain/340/HAC_3.0sp1_Instructions_EN_SP_combined.pdf" target="_blank">Help</a></li>
+                <li class="sg-banner-menu-divider"></li>
+                <li class="sg-banner-menu-element sg-menu-element-logoff"><a href="/HomeAccess/Account/Logoff">Logout</a></li>
+            </ul>
+            <div class="sg-banner-menu-right"></div>
+        </div>
+            <div class="sg-banner-chooser">
+                <span class="sg-banner-learning-location"></span>
+            </div>
+    </div>
+</div>
+<script nonce="uEx4sw0+mXAvr0UzspNfUpUZ" type="text/javascript">
+    $(function () {
+        SunGard.Common.AddResource('Cancel', 'Cancel');
+        SunGard.Common.AddResource('Submit', 'Submit');
+        SunGard.Common.AddResource('EnrollNewStudent', 'Enroll New Student');
+        SunGard.Common.AddResource('ChangeStudentTitle', 'Choose Your Student');
+    })
+</script>
+        
+
+<script nonce="uEx4sw0+mXAvr0UzspNfUpUZ">
+        $(function() {
+            $('#hac-Home').click(function() { window.location = '/HomeAccess/Home/Home'; });
+        });
+            $(function () {
+                $('#hac-nav-submenu-Home-WeekView').click(function () { window.location = '/HomeAccess/Home/WeekView'; });
+                $('#hac-Home').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Home/Home'; } });
+            });
+            $(function () {
+                $('#hac-nav-submenu-Home-Calendar').click(function () { window.location = '/HomeAccess/Home/Calendar'; });
+                $('#hac-Home').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Home/Home'; } });
+            });
+            $(function () {
+                $('#hac-nav-submenu-Home-SchoolLinks').click(function () { window.location = '/HomeAccess/Home/SchoolLinks'; });
+                $('#hac-Home').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Home/Home'; } });
+            });
+        $(function() {
+            $('#hac-Attendance').click(function() { window.location = '/HomeAccess/Attendance'; });
+        });
+            $(function () {
+                $('#hac-nav-submenu-Attendance-MonthView').click(function () { window.location = '/HomeAccess/Attendance/MonthView'; });
+                $('#hac-Attendance').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Attendance'; } });
+            });
+        $(function() {
+            $('#hac-Classes').click(function() { window.location = '/HomeAccess/Classes'; });
+        });
+            $(function () {
+                $('#hac-nav-submenu-Classes-Classwork').click(function () { window.location = '/HomeAccess/Classes/Classwork'; });
+                $('#hac-Classes').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Classes'; } });
+            });
+            $(function () {
+                $('#hac-nav-submenu-Classes-Schedule').click(function () { window.location = '/HomeAccess/Classes/Schedule'; });
+                $('#hac-Classes').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Classes'; } });
+            });
+        $(function() {
+            $('#hac-Grades').click(function() { window.location = '/HomeAccess/Grades'; });
+        });
+            $(function () {
+                $('#hac-nav-submenu-Grades-IPR').click(function () { window.location = '/HomeAccess/Grades/IPR'; });
+                $('#hac-Grades').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Grades'; } });
+            });
+            $(function () {
+                $('#hac-nav-submenu-Grades-ReportCard').click(function () { window.location = '/HomeAccess/Grades/ReportCard'; });
+                $('#hac-Grades').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Grades'; } });
+            });
+            $(function () {
+                $('#hac-nav-submenu-Grades-Transcript').click(function () { window.location = '/HomeAccess/Grades/Transcript'; });
+                $('#hac-Grades').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Grades'; } });
+            });
+        $(function() {
+            $('#hac-Registration').click(function() { window.location = '/HomeAccess/Registration'; });
+        });
+            $(function () {
+                $('#hac-nav-submenu-Registration-Demographic').click(function () { window.location = '/HomeAccess/Registration/Demographic'; });
+                $('#hac-Registration').on('keypress', function(e) { if (e.which == 13) { window.location = '/HomeAccess/Registration'; } });
+            });
+</script>
+
+<div id="hac-nav-menu" class ="sg-hac-menu">
+    <div class="sg-hac-menu-options">
+            <div id="hac-Home" class="sg-hac-menu-option sg-hac-menu-option-selected" tabindex="0" role="link" subDiv="#hac-nav-submenu-Home-options">
+                <img alt="Home" src="/HomeAccess/Media/images/Menu/hac-Home.png" />
+                <span>Home</span> 
+            </div>
+            <div id="hac-Attendance" class="sg-hac-menu-option" tabindex="0" role="link" subDiv="#hac-nav-submenu-Attendance-options">
+                <img alt="Attendance" src="/HomeAccess/Media/images/Menu/hac-Attendance.png" />
+                <span>Attendance</span> 
+            </div>
+            <div id="hac-Classes" class="sg-hac-menu-option" tabindex="0" role="link" subDiv="#hac-nav-submenu-Classes-options">
+                <img alt="Classes" src="/HomeAccess/Media/images/Menu/hac-Classes.png" />
+                <span>Classes</span> 
+            </div>
+            <div id="hac-Grades" class="sg-hac-menu-option" tabindex="0" role="link" subDiv="#hac-nav-submenu-Grades-options">
+                <img alt="Grades" src="/HomeAccess/Media/images/Menu/hac-Grades.png" />
+                <span>Grades</span> 
+            </div>
+            <div id="hac-Registration" class="sg-hac-menu-option" tabindex="0" role="link" subDiv="#hac-nav-submenu-Registration-options">
+                <img alt="Registration" src="/HomeAccess/Media/images/Menu/hac-Registration.png" />
+                <span>Registration</span> 
+            </div>
+    </div>
+</div>
+<div id="hac-nav-submenu" class="sg-hac-submenu">
+    <div id="hac-nav-submenu-Home-options" class="sg-hac-submenu-options" style="">
+            <div id="hac-nav-submenu-Home-WeekView" class="sg-hac-submenu-option sg-hac-submenu-option-selected">
+                <span>Week View</span>
+            </div>
+            <div id="hac-nav-submenu-Home-Calendar" class="sg-hac-submenu-option">
+                <span>Calendar</span>
+            </div>
+            <div id="hac-nav-submenu-Home-SchoolLinks" class="sg-hac-submenu-option">
+                <span>School Links</span>
+            </div>
+    </div>
+    <div id="hac-nav-submenu-Attendance-options" class="sg-hac-submenu-options" style="display:none;">
+            <div id="hac-nav-submenu-Attendance-MonthView" class="sg-hac-submenu-option">
+                <span>Month View</span>
+            </div>
+    </div>
+    <div id="hac-nav-submenu-Classes-options" class="sg-hac-submenu-options" style="display:none;">
+            <div id="hac-nav-submenu-Classes-Classwork" class="sg-hac-submenu-option">
+                <span>Classwork</span>
+            </div>
+            <div id="hac-nav-submenu-Classes-Schedule" class="sg-hac-submenu-option">
+                <span>Schedule</span>
+            </div>
+    </div>
+    <div id="hac-nav-submenu-Grades-options" class="sg-hac-submenu-options" style="display:none;">
+            <div id="hac-nav-submenu-Grades-IPR" class="sg-hac-submenu-option">
+                <span>IPR</span>
+            </div>
+            <div id="hac-nav-submenu-Grades-ReportCard" class="sg-hac-submenu-option">
+                <span>Report Card</span>
+            </div>
+            <div id="hac-nav-submenu-Grades-Transcript" class="sg-hac-submenu-option">
+                <span>Transcript</span>
+            </div>
+    </div>
+    <div id="hac-nav-submenu-Registration-options" class="sg-hac-submenu-options" style="display:none;">
+            <div id="hac-nav-submenu-Registration-Demographic" class="sg-hac-submenu-option">
+                <span>Demographic</span>
+            </div>
+    </div>
+</div>
+    </div>
+
+    
+
+
+<div id="MainContent" class="sg-main-content">
+    
+
+    <div style="display: none;" id="session-block">
+    </div>
+    <div id="session-container" style="display: none;" class="sg-container" id="TimedOutSectionContainer">
+        <div class="sg-header">
+		    <img class="sg-header-image" src="/HomeAccess/Media/Themes/Base/Headers/header-session-expire.png" alt="Session Timed Out" />
+		    <span class="sg-header-heading">Session Warning</span>
+        </div>
+        <div class="sg-container-content" id="session-background">
+            <p>Your session is about to expire.  Unsaved changes will be lost.</p>
+            <div id="session-buttons" class="sg-container-button">
+                <button Name="session-renew" Value="" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="session-renew"><span class="ui-button-text">Keep session open</span></button>
+                <button Name="session-ignore" Value="" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" id="session-ignore"><span class="ui-button-text">Ignore</span></button>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+
+
+
+﻿﻿
+
+
+
+
+<style >
+    .sg-weekview-learning-location {
+        float: right !important;
+        background: #ffffff;
+    }
+</style>
+
+
+
+
+<form action="/HomeAccess/Home/WeekView" method="post"><input name="__RequestVerificationToken" type="hidden" value="LqW6QuPmw3HbLRNpkLk7v6dapGQkCt3g3vryU-jjKoBpmKxJwI1rHMC-qSg_RfXIOW5RB0r6sNbbq1qtXj4hsrvKQNOekKkyXzGZLoDIesA1" />    <div id="mainpage" class='sg-hac-content'>
+            <div class="sg-header">
+                <label class="sg-header-heading" id="lblTitle">Today&#39;s News</label>
+            </div>
+            <div class="sg-content-grid">
+                <ul>
+                            <li>There is no current news.</li>
+
+                </ul>
+
+            </div>
+
+        <div class="sg-header">
+                    </div>
+        <div class="sg-content-grid">
+            <div class="sg-home-sub-header sg-clearfix">
+                <div class="sg-left">
+                    <div class="sg-buttonset sg-home-nav-button">
+
+
+                        <button title='View previous weeks' class="sg-home-sub-header-button" onclick="location.href='/HomeAccess/Home/WeekView?startDate=10%2F06%2F2025%2000%3A00%3A00'; return false;" ><i class="icon-chevron-left"></i></button>
+
+
+                        <button title='View future weeks' class="sg-home-sub-header-button" onclick="location.href='/HomeAccess/Home/WeekView?startDate=10%2F20%2F2025%2000%3A00%3A00'; return false;" ><i class="icon-chevron-right"></i></button>
+                    </div>
+                    <label class="sg-5px-margin sg-home-nav-label">Monday October 13, 2025 - Friday October 17, 2025 </label>
+                </div>
+                <div class="sg-right">
+                        <button title='Return to today&#39;s date' class="sg-button sg-home-sub-header-button  sg-page-button-font" onclick="location.href='/HomeAccess/Home/WeekView'; return false;"> Today </button>
+                                            <button title='View student&#39;s schedule' class="sg-button sg-home-sub-header-button sg-page-button-font" onclick="location.href='/HomeAccess/Classes/Schedule'; return false;">  View Full Schedule </button>
+                </div>
+            </div>
+            <table class="sg-asp-table sg-table-horizontal-border sg-homeview-table">
+                <thead>
+                    <tr class='sg-asp-table-header-row'>
+                        <td><div class="sg-asp-table-header-cell-large-text">Class</div></td>
+                                                    <td><div class="sg-asp-table-header-cell-large-text">Current Average</div></td>
+                                                    <td class="sg-cell-width">
+                                <div>
+                                        <a title='Schedule for Monday 10/13' href="javascript:SunGard.Hac.Home.ViewSchedulePopUp('822991', '10/13/2025', '/HomeAccess/Content/Student/DailySchedule.aspx');">
+
+                                    Monday
+
+                                    
+
+                                    </span>
+                                </div>
+                                10/13
+
+                                <div class="sg-right">
+                                    Day: C                                </div>
+                            </td>
+                            <td class="sg-cell-width">
+                                <div>
+                                        <a title='Schedule for Tuesday 10/14' href="javascript:SunGard.Hac.Home.ViewSchedulePopUp('822991', '10/14/2025', '/HomeAccess/Content/Student/DailySchedule.aspx');">
+
+                                    Tuesday
+
+                                    
+
+                                    </span>
+                                </div>
+                                10/14
+
+                                <div class="sg-right">
+                                    Day: T                                </div>
+                            </td>
+                            <td class="sg-cell-width">
+                                <div>
+                                        <a title='Schedule for Wednesday 10/15' href="javascript:SunGard.Hac.Home.ViewSchedulePopUp('822991', '10/15/2025', '/HomeAccess/Content/Student/DailySchedule.aspx');">
+
+                                    Wednesday
+
+                                    
+
+                                    </span>
+                                </div>
+                                10/15
+
+                                <div class="sg-right">
+                                    Day: W                                </div>
+                            </td>
+                            <td class="sg-asp-table-header-selected sg-cell-width">
+                                <div>
+                                        <a title='Schedule for Thursday 10/16' href="javascript:SunGard.Hac.Home.ViewSchedulePopUp('822991', '10/16/2025', '/HomeAccess/Content/Student/DailySchedule.aspx');">
+
+                                    Thursday
+
+                                    
+
+                                    </span>
+                                </div>
+                                10/16
+
+                                <div class="sg-right">
+                                    Day: R                                </div>
+                            </td>
+                            <td class="sg-cell-width">
+                                <div>
+                                        <a title='Schedule for Friday 10/17' href="javascript:SunGard.Hac.Home.ViewSchedulePopUp('822991', '10/17/2025', '/HomeAccess/Content/Student/DailySchedule.aspx');">
+
+                                    Friday
+
+                                    
+
+                                    </span>
+                                </div>
+                                10/17
+
+                                <div class="sg-right">
+                                    Day: F                                </div>
+                            </td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(231427, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">EB Strength &amp; Cond S</a>
+
+                                    <div>
+                                        <span>(PE0620     - 1)</span>
+                                        <span>Per: 0    </span>
+                                    </div>
+
+                                            <a href="mailto:murphyb@eths202.org" id="staffName">
+                                                Murphy, Brian
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(231427, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');">100.00</a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#ff0000 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#ff0000 ;">Unexcused</span>
+                                                </div>
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Bench/OHP
+Category: Activity
+Due Date: 10/13/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('27', null, null, null, 231427, 1);">Bench/OHP</a>
+
+                                                        <span class="sg-right">
+                                                            10/10
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Wellness Walk
+Category: Activity
+Due Date: 10/14/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('28', null, null, null, 231427, 1);">Wellness Walk</a>
+
+                                                        <span class="sg-right">
+                                                            10/10
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Deadlift/Rows
+Category: Activity
+Due Date: 10/15/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('29', null, null, null, 231427, 1);">Deadlift/Rows</a>
+
+                                                        <span class="sg-right">
+                                                            10/10
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(230495, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">Inquiries Hum Bhvr S</a>
+
+                                    <div>
+                                        <span>(HS3762     - 1)</span>
+                                        <span>Per: 1    </span>
+                                    </div>
+
+                                            <a href="mailto:markgrafa@eths202.org" id="staffName">
+                                                Markgraf, Adam
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(230495, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');">0.00</a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Classical Conditioning Practice
+Category: Activity
+Due Date: 10/14/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('23', null, null, null, 230495, 1);">Classical Conditioning Practice</a>
+
+                                                        <span class="sg-right">
+                                                            0/10
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Advertising Analysis 
+Category: Activity
+Due Date: 10/14/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('24', null, null, null, 230495, 1);">Advertising Analysis </a>
+
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(229759, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">AB Calculus AP</a>
+
+                                    <div>
+                                        <span>(MA0555     - 9)</span>
+                                        <span>Per: 2    </span>
+                                    </div>
+
+                                            <a href="mailto:roseb@eths202.org" id="staffName">
+                                                Rose, Blaire
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(229759, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');">60.00</a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Unit 3 HW 1
+Category: Homework
+Due Date: 10/15/2025
+Max Points: 5.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('23', null, null, null, 229759, 1);">Unit 3 HW 1</a>
+
+                                                        <span class="sg-right">
+                                                            3/5
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(193723, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">Cybersecurity1:NtwkFun</a>
+
+                                    <div>
+                                        <span>(IT0625     - 1)</span>
+                                        <span>Per: 5A   </span>
+                                    </div>
+
+                                            <a href="mailto:striblingvergarar@eths202.org" id="staffName">
+                                                Stribling-Vergar, Raymund
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(193723, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#cccc00 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#cccc00 ;">Tardy</span>
+                                                </div>
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Week 10 Participation
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 4.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('25', null, null, null, 193723, 1);">Week 10 Participation</a>
+
+                                                </span>
+                                            </div>
+                                            <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: CodeHS: 4.7 to 4.9
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 4.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('26', null, null, null, 193723, 1);">CodeHS: 4.7 to 4.9</a>
+
+                                                </span>
+                                            </div>
+                                    </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(193723, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">Cybersecurity1:NtwkFun</a>
+
+                                    <div>
+                                        <span>(IT0625     - 1)</span>
+                                        <span>Per: 5X   </span>
+                                    </div>
+
+                                            <a href="mailto:striblingvergarar@eths202.org" id="staffName">
+                                                Stribling-Vergar, Raymund
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(193723, 2, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(233174, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">12 Lunch sem 1</a>
+
+                                    <div>
+                                        <span>(AM130L     - 2)</span>
+                                        <span>Per: 5B   </span>
+                                    </div>
+
+                                            <a href="mailto:isfiles@eths202.org" id="staffName">
+                                                Staff
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(233174, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(230551, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">12 Lunch 1 sem 1</a>
+
+                                    <div>
+                                        <span>(AM131L     - 31)</span>
+                                        <span>Per: 6A   </span>
+                                    </div>
+
+                                            <a href="mailto:isfiles@eths202.org" id="staffName">
+                                                Staff
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(230551, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(230974, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">Forensic Science H</a>
+
+                                    <div>
+                                        <span>(SC0283     - 7)</span>
+                                        <span>Per: 6X   </span>
+                                    </div>
+
+                                            <a href="mailto:curtina@eths202.org" id="staffName">
+                                                Curtin, Allison
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(230974, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Notes: Tool Impressions
+Category: Formative Assessments
+Due Date: 10/15/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('23', null, null, null, 230974, 1);">Notes: Tool Impressions</a>
+
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(230974, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">Forensic Science H</a>
+
+                                    <div>
+                                        <span>(SC0283     - 7)</span>
+                                        <span>Per: 6B   </span>
+                                    </div>
+
+                                            <a href="mailto:curtina@eths202.org" id="staffName">
+                                                Curtin, Allison
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(230974, 2, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(193728, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">4 Eng 2: Asian Lit H</a>
+
+                                    <div>
+                                        <span>(EN4433     - 1)</span>
+                                        <span>Per: 7    </span>
+                                    </div>
+
+                                            <a href="mailto:bucioa@eths202.org" id="staffName">
+                                                Bucio, Anita
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(193728, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="sg-5px-margin">
+
+                                        <a id="courseName" class="sg-font-larger" href="javascript:SunGard.Hac.Home.ViewClassPopUp(230980, 1, '/HomeAccess/Content/Student/ClassPopUp.aspx');">PF: Info Tech Intern S</a>
+
+                                    <div>
+                                        <span>(IT1210     - 3)</span>
+                                        <span>Per: 8    </span>
+                                    </div>
+
+                                            <a href="mailto:striblingvergarar@eths202.org" id="staffName">
+                                                Stribling-Vergar, Raymund
+                                            </a>
+                                </div>
+                            </td>
+
+
+                                <td>
+                                        <a id="average" class="sg-font-larger-average" href="javascript:SunGard.Hac.Home.ViewAssignmentsRCPopUp(230980, 1, 'MP   .Trim()', 1, '/HomeAccess/Content/Student/AssignmentsFromRCPopUp.aspx');"></a>
+                                </td>
+
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                <div>
+                                                    <div style="color:#006600 ;" class="sg-topleft-triangle sg-asp-table-no-top-padding sg-asp-table-no-left-padding"></div>
+                                                    <span style="color:#006600 ;">Present</span>
+                                                </div>
+                                                                            </div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                            </div>
+                                            <div class="sg-asp-table-parent-disable"></div>
+
+                                </td>
+                                <td>
+                                    <div class="sg-att-table-cell">
+                                                                                    <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Week 10 Front Desk Area
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 2.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('39', null, null, null, 230980, 1);">Week 10 Front Desk Area</a>
+
+                                                        <span class="sg-right">
+                                                            2/2
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Week 10 Back Repairs Area
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 2.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('40', null, null, null, 230980, 1);">Week 10 Back Repairs Area</a>
+
+                                                        <span class="sg-right">
+                                                            0/2
+                                                                                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: EVERFI: Education &amp; Financial Aid
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 10.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('94', null, null, null, 230980, 1);">EVERFI: Education &amp; Financial Aid</a>
+
+                                                </span>
+                                            </div>
+                                            <div class="sg-clearfix">
+                                                <span class="sg-left sg-assignment-description" title="Type: Assignment Course
+Title: Discussion: Education &amp; Financial Aid
+Category: Assignment
+Due Date: 10/17/2025
+Max Points: 4.00
+Can Be Dropped: N
+Extra Credit: N
+Has Attachments: N">
+                                                    <a id="courseAssignmentDescription" href="#" onclick="SunGard.Hac.SharedClasswork.OpenAssignmentDialog('95', null, null, null, 230980, 1);">Discussion: Education &amp; Financial Aid</a>
+
+                                                </span>
+                                            </div>
+                                    </div>
+
+                                </td>
+                        </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+
+
+
+</div>
+
+
+    <div class="sg-main-footer">
+        <span class="sg-hac-footer-logo"></span>
+<span class="sg-hac-copyright">&copy; 2003 - 2025 PowerSchool.  All Rights Reserved.</span>
+<span class=" sg-hac-footer-links">
+        <a href="javascript:SunGard.Hac.Frame.Footer.DisplayFooterPopup('/HomeAccess/Frame/PrivacyPolicy', 'Privacy Policy')">
+            Privacy Policy
+        </a>
+
+        <a href="javascript:SunGard.Hac.Frame.Footer.DisplayFooterPopup('/HomeAccess/Frame/TermsOfUse', 'Terms of Use')">
+            Terms of Use
+        </a>
+</span>
+
+    </div>
+
+    
+
+
+
+        
+        <script nonce="uEx4sw0+mXAvr0UzspNfUpUZ">
+            $(function() {
+                // Build the jQuery UI buttons
+                $('.sg-buttonset').buttonset();
+                $('.sg-button').button();
+            })
+        </script>
+    </body>
+    
+    
+    
+
+
+</html>

@@ -1,0 +1,213 @@
+
+
+<!DOCTYPE html>
+<html>
+<head><title>
+	HomeAccess
+</title>
+    
+    <link href="/HomeAccess/Stylesheets/Themes/Base/css?v=tw0njYZqSOVYHn_D3DhCDTytd6fBWpHQgVTAo5eiREQ1" rel="Stylesheet" type="text/css" /> 
+
+    
+    <link rel="Stylesheet" href="/HomeAccess/eSchoolPLUSResource/GetEmbeddedStyle?file=CrossSite" />
+    <link rel="Stylesheet" href="/HomeAccess/eSchoolPLUSResource/GetEmbeddedStyle?file=ComboBox" />
+    <link rel="Stylesheet" href="/HomeAccess/Stylesheets/Common/font-awesome.css" />
+    
+    
+    <link rel="Stylesheet" href="/HomeAccess/Stylesheets/Site.css" />
+    <link rel="stylesheet" href="/HomeAccess/Stylesheets/Frame/Frame.css" /> 
+    <link rel="SHORTCUT ICON" href="/HomeAccess/Media/Themes/Base/Common/favicon.ico"/>
+    <style>
+        .sg-asp-table-header-row,
+        .ui-jqgrid-view .ui-jqgrid-hdiv, 
+        .ui-jqgrid tr.ui-jqgrid-labels th  {
+	        background-color: #1a2741  ;
+            color: #ff5a00  ;
+        }
+    </style>
+
+    <script src="/HomeAccess/Scripts/libs/jquery?v=qIcuP3UP_aRnf7YSojJ0X96urcPMuU40OLTAhIFZUhU1" type="text/javascript"></script>   
+    <script src="/HomeAccess/Scripts/libs/modernizr-2.8.3.js" type="text/javascript"></script>   
+    <script src="/HomeAccess/Scripts/Trirand/ui.multiselect.js" type="text/javascript" ></script>
+    <script src="/HomeAccess/Scripts/Trirand/i18n/grid.locale-en.js" type="text/javascript"></script>
+    <script src="/HomeAccess/Scripts/Trirand/jquery.jqGrid.js" type="text/javascript"></script>
+    <script src="/HomeAccess/Scripts/libs/json2.js" type="text/javascript"></script>
+    <script src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=SungardCommon" type="text/javascript"></script>    
+    <script src="/HomeAccess/eSchoolPLUSResource/GetEmbeddedScript?file=Combobox" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            parseForComboBoxes();
+        });
+    </script>    
+    
+
+    <script type="text/javascript">
+        $(SunGard.Common.Init('/HomeAccess/'));
+    </script>
+    
+    
+    
+    
+	<script type="text/javascript" src="/HomeAccess/Content/Common/querystring.js"></script>
+	<script type="text/javascript" src="ClassNotes.js"></script>
+	<script type="text/javascript">
+	    $(function() {
+	        $('#ddlMarkPeriods').change(ddlMarkPeriods_onchange);
+		});
+	    function ddlMarkPeriods_onchange()
+	    {
+	        var option = $("#ddlMarkPeriods").options.item($("#ddlMarkPeriods").selectedIndex);
+	        var qs = parse_querystring();
+	        qs.set_item("marking_period", option.value.replace(" ",""));
+	        window.location.search = construct_querystring(qs);
+	    }
+	    function OpenClassPopUp(sectionKey) {
+	        window.open("ClassPopUp.aspx?section_key=" + sectionKey, null, "status=no,menubar=no,toolbar=no,scrollbars=yes,width=800,height=450");
+	        return false;
+	    }
+    </script>
+	 
+</head>
+<body>
+    
+    <div id='MainContent' class='sg-main-content'>
+        <div class='sg-hac-content'>
+            <form method="post" action="./Classes.aspx" id="fmMain">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="oThAxUkyUaAjRDWets3F9ahPcNOHM3jK1u1lnoC/jtrPA5hpC2FUGjEQTzVSIO3iBl3Q9OERx4AaPMWtgA5JrldbgZWZOimT20xqiuiP6+g=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="A4BFC39B" />
+</div>
+                
+
+	 
+	<div id="divLocker" class="sg-right"  >
+	      <table><tr>
+		  <td width="25%">
+		  
+		  
+		  </td>
+		  <td width="25%">
+		  
+		  
+		  </td>
+		  <td width="25%">
+		  
+		  
+		  </td>
+		  </tr></table>
+	</div>
+	 
+	 
+    <div class="sg-header">
+        <div id="plnMain_pageTitle" class="sg-header-heading">2025 - 2026 Schedule</div>
+    </div>
+	 
+    <div class="sg-content-grid">
+        
+		
+<table class="sg-asp-table" cellspacing="0" rules="all" border="1" id="plnMain_dgSchedule" style="border-collapse:collapse;">
+	<tr class="sg-asp-table-header-row">
+		<td>Course</td><td>Description</td><td>Periods</td><td>Teacher</td><td>Room</td><td>Days</td><td>Marking Periods</td><td>Building</td><td>Status</td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>PE0620 - 1        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('231427'); return false;">EB Strength &amp; Cond S</a>
+				    </td><td>0            </td><td><a href="mailto:murphyb@eths202.org                                                                                                                                                                                                                                            ">Murphy, Brian            </a></td><td>G201      </td><td>M, T, W, R, F</td><td>M1, M2</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>PE0620 - 3        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('232127'); return false;">EB Strength &amp; Cond S</a>
+				    </td><td>0            </td><td><a href="mailto:murphyb@eths202.org                                                                                                                                                                                                                                            ">Murphy, Brian            </a></td><td>G201      </td><td>M, T, W, R, F</td><td>M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>HS3762 - 1        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230495'); return false;">Inquiries Hum Bhvr S</a>
+				    </td><td>1            </td><td><a href="mailto:markgrafa@eths202.org                                                                                                                                                                                                                                          ">Markgraf, Adam           </a></td><td>S314      </td><td>M, T, R</td><td>M1, M2</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>MA0555 - 9        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('229759'); return false;">AB Calculus AP</a>
+				    </td><td>2            </td><td><a href="mailto:roseb@eths202.org                                                                                                                                                                                                                                              ">Rose, Blaire             </a></td><td>N311      </td><td>M, W, F</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>IT0625 - 1        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('193723'); return false;">Cybersecurity1:NtwkFun</a>
+				    </td><td>5A           </td><td><a href="mailto:striblingvergarar@eths202.org                                                                                                                                                                                                                                  ">Stribling-Vergar, Raymund</a></td><td>A335      </td><td>M, T, R</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>IT0625 - 1        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('193723'); return false;">Cybersecurity1:NtwkFun</a>
+				    </td><td>5X           </td><td><a href="mailto:striblingvergarar@eths202.org                                                                                                                                                                                                                                  ">Stribling-Vergar, Raymund</a></td><td>A335      </td><td>T, R</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>AM130L - 2        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('233174'); return false;">12 Lunch sem 1</a>
+				    </td><td>5B           </td><td><a href="mailto:isfiles@eths202.org                                                                                                                                                                                                                                            ">Staff                    </a></td><td>S120      </td><td>M, T, R</td><td>M1, M2</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>AM230L - 2        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('233178'); return false;">12 Lunch sem 2</a>
+				    </td><td>5B           </td><td><a href="mailto:isfiles@eths202.org                                                                                                                                                                                                                                            ">Staff                    </a></td><td>S120      </td><td>M, T, R</td><td>M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>AM131L - 31       </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230551'); return false;">12 Lunch 1 sem 1</a>
+				    </td><td>6A           </td><td><a href="mailto:isfiles@eths202.org                                                                                                                                                                                                                                            ">Staff                    </a></td><td>S120      </td><td>W, F</td><td>M1, M2</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>AM231L - 31       </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230553'); return false;">12 Lunch 1 sem 2</a>
+				    </td><td>6A           </td><td><a href="mailto:isfiles@eths202.org                                                                                                                                                                                                                                            ">Staff                    </a></td><td>S120      </td><td>W, F</td><td>M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>SC0283 - 7        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230974'); return false;">Forensic Science H</a>
+				    </td><td>6X           </td><td><a href="mailto:curtina@eths202.org                                                                                                                                                                                                                                            ">Curtin, Allison          </a></td><td>H311      </td><td>M, W, F</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>SC0283 - 7        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230974'); return false;">Forensic Science H</a>
+				    </td><td>6B           </td><td><a href="mailto:curtina@eths202.org                                                                                                                                                                                                                                            ">Curtin, Allison          </a></td><td>H311      </td><td>W, F</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>EN4433 - 1        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('193728'); return false;">4 Eng 2: Asian Lit H</a>
+				    </td><td>7            </td><td><a href="mailto:bucioa@eths202.org                                                                                                                                                                                                                                             ">Bucio, Anita             </a></td><td>S209      </td><td>M, T, R</td><td>M1, M2, M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>IT1210 - 3        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230980'); return false;">PF: Info Tech Intern S</a>
+				    </td><td>8            </td><td><a href="mailto:striblingvergarar@eths202.org                                                                                                                                                                                                                                  ">Stribling-Vergar, Raymund</a></td><td>H220      </td><td>M, W, F</td><td>M1, M2</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr><tr class="sg-asp-table-data-row">
+		<td>AR1482 - 6        </td><td>
+					    <a href="#" onclick="OpenClassPopUp('230488'); return false;">1 Photography S</a>
+				    </td><td>8            </td><td><a href="mailto:dusolde@eths202.org                                                                                                                                                                                                                                            ">Dusold, Elizabeth        </a></td><td>A230      </td><td>M, W, F</td><td>M3, M4</td><td>Evanston Twp. High School</td><td>Active    </td>
+	</tr>
+</table>
+
+        <div class="sg-header">
+            
+        </div>
+	    
+
+	    <div>
+	        
+	    </div>
+
+        <div class="sg-header sg-20px-margin-top">
+	        
+        </div>
+	    
+	    <div>
+	        
+	    </div>
+    </div>
+
+            </form>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            // Build the jQuery UI buttons
+            $('.sg-buttonset').buttonset();
+            $('.sg-button').button();
+            window.parent.$('.sg-legacy-iframe').height($('.sg-main-content').height()); // set the init size
+            // Increase length of smaller content windows to reduce cutoffs in dropdowns. 
+            var iframeHeight = window.parent.$('.sg-legacy-iframe').height(); 
+            if (iframeHeight < 450)
+            { window.parent.$('.sg-legacy-iframe').height($('.sg-main-content').height() + 200); }
+           
+        })
+    </script>
+</body>
+</html>
