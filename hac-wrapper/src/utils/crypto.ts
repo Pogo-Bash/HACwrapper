@@ -28,7 +28,7 @@ export class CryptoService {
     return crypto.subtle.deriveKey(
       {
         name: 'PBKDF2',
-        salt: salt,
+        salt: salt.buffer,
         iterations: this.ITERATIONS,
         hash: 'SHA-256',
       },
@@ -72,8 +72,8 @@ export class CryptoService {
 
     // Convert to base64 for storage
     return {
-      encryptedUsername: this.bufferToBase64(encryptedUsernameBuffer),
-      encryptedPassword: this.bufferToBase64(encryptedPasswordBuffer),
+      encryptedUsername: this.bufferToBase64(new Uint8Array(encryptedUsernameBuffer).buffer),
+      encryptedPassword: this.bufferToBase64(new Uint8Array(encryptedPasswordBuffer).buffer),
       salt: this.bufferToBase64(salt),
       iv: this.bufferToBase64(iv),
     };
@@ -128,7 +128,7 @@ export class CryptoService {
     const encoder = new TextEncoder();
     const data = encoder.encode(username + password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    return this.bufferToBase64(hashBuffer);
+    return this.bufferToBase64(new Uint8Array(hashBuffer).buffer);
   }
 
   /**
@@ -158,7 +158,7 @@ export class CryptoService {
     const binary = atob(base64);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
+      bytes[i] = binary.charCodeAt(i) || 0;
     }
     return bytes.buffer;
   }

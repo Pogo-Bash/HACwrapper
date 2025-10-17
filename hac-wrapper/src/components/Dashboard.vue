@@ -76,10 +76,10 @@ const loadClassGrades = async (classId: string) => {
  * Get grade color based on percentage
  */
 const getGradeColor = (average: number): string => {
-  if (average >= 90) return 'text-green-600 dark:text-green-400';
-  if (average >= 80) return 'text-blue-600 dark:text-blue-400';
-  if (average >= 70) return 'text-yellow-600 dark:text-yellow-400';
-  if (average >= 60) return 'text-orange-600 dark:text-orange-400';
+  if (Number(average) >= 90) return 'text-green-600 dark:text-green-400';
+  if (Number(average) >= 80) return 'text-blue-600 dark:text-blue-400';
+  if (Number(average) >= 70) return 'text-yellow-600 dark:text-yellow-400';
+  if (Number(average) >= 60) return 'text-orange-600 dark:text-orange-400';
   return 'text-red-600 dark:text-red-400';
 };
 
@@ -87,10 +87,10 @@ const getGradeColor = (average: number): string => {
  * Get grade letter
  */
 const getGradeLetter = (average: number): string => {
-  if (average >= 90) return 'A';
-  if (average >= 80) return 'B';
-  if (average >= 70) return 'C';
-  if (average >= 60) return 'D';
+  if (Number(average) >= 90) return 'A';
+  if (Number(average) >= 80) return 'B';
+  if (Number(average) >= 70) return 'C';
+  if (Number(average) >= 60) return 'D';
   return 'F';
 };
 

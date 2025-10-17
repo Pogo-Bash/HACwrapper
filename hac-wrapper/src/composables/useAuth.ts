@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import type { HACCredentials, EncryptedCredentials } from '../types/hac.types';
+import type { HACCredentials } from '../types/hac.types';
 import { CryptoService } from '../utils/crypto';
 
 const STORAGE_KEY = 'hac_encrypted_credentials';
