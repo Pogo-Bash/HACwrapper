@@ -82,12 +82,20 @@ export default defineConfig({
   },
   
   server: {
+    host: '0.0.0.0', // ADD THIS - allows external connections
+    port: process.env.PORT ? parseInt(process.env.PORT) : 5173, // ADD THIS - uses Render's PORT
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true
       }
     }
+  },
+  
+  // ADD THIS - for production preview mode
+  preview: {
+    host: '0.0.0.0',
+    port: process.env.PORT ? parseInt(process.env.PORT) : 4173
   },
   
   // Optimize deps
