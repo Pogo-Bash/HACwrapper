@@ -29,7 +29,7 @@ This guide will help you deploy the HAC Wrapper application to Render.
    **Build & Deploy Settings:**
    - **Name:** hac-wrapper (or your preferred name)
    - **Runtime:** Node
-   - **Build Command:** `npm install && npm run build`
+   - **Build Command:** `npm install --production=false && npm run build`
    - **Start Command:** `npm start`
 
    **Environment Variables:**
@@ -41,7 +41,7 @@ This guide will help you deploy the HAC Wrapper application to Render.
 ## What Happens During Deployment
 
 1. **Build Phase:**
-   - `npm install` - Installs all dependencies
+   - `npm install --production=false` - Installs all dependencies including devDependencies
    - `npm run build` - Builds the Vue.js frontend into the `dist` folder
 
 2. **Start Phase:**
@@ -63,9 +63,11 @@ The deployment runs a **single unified server** that:
 For quick reference when setting up manually:
 
 ```
-Build Command: npm install && npm run build
+Build Command: npm install --production=false && npm run build
 Start Command: npm start
 ```
+
+**Note:** The `--production=false` flag ensures that devDependencies (like vite, vue-tsc) are installed during the build phase, which are required to build the frontend.
 
 ## Troubleshooting
 
