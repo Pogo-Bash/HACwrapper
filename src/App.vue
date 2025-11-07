@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 interface Class {
   classId: string
@@ -64,10 +64,10 @@ onMounted(async () => {
   const savedTheme = localStorage.getItem('theme')
   darkMode.value = savedTheme === 'dark'
   applyTheme()
-  
+
   const savedUsername = localStorage.getItem('hacUsername')
   if (savedUsername) username.value = savedUsername
-  
+
   try {
     debugInfo.value = 'Testing proxy connection...'
     const response = await fetch('/api/health')
@@ -87,10 +87,13 @@ function toggleDarkMode() {
 }
 
 function applyTheme() {
+  const html = document.documentElement
   if (darkMode.value) {
-    document.documentElement.classList.add('dark')
+    html.setAttribute('data-theme', 'dark')
+    html.classList.add('dark')
   } else {
-    document.documentElement.classList.remove('dark')
+    html.setAttribute('data-theme', 'light')
+    html.classList.remove('dark')
   }
 }
 
@@ -107,7 +110,7 @@ async function login() {
   try {
     localStorage.setItem('hacUsername', username.value)
     debugInfo.value = 'Logging in securely...'
-    
+
     const nameResponse = await fetch('/api/name', {
       method: 'POST',
       headers: {
@@ -126,11 +129,11 @@ async function login() {
     }
 
     const nameData = await nameResponse.json()
-    
+
     if (nameData.error) {
       throw new Error(nameData.error)
     }
-    
+
     if (nameData.name && nameData.name !== 'Student') {
       studentName.value = nameData.name
       isLoggedIn.value = true
@@ -140,7 +143,7 @@ async function login() {
     }
 
     debugInfo.value = 'Fetching classes...'
-    
+
     const classesResponse = await fetch('/api/classaverage', {
       method: 'POST',
       headers: {
@@ -159,7 +162,7 @@ async function login() {
     }
 
     const classesData = await classesResponse.json()
-    
+
     if (Array.isArray(classesData)) {
       classes.value = classesData
       debugInfo.value = `✅ Loaded ${classesData.length} classes`
@@ -168,11 +171,11 @@ async function login() {
   } catch (err) {
     console.error('Login error:', err)
     error.value = err instanceof Error ? err.message : 'Failed to fetch data'
-    
+
     if (error.value.includes('Failed to fetch') || error.value.includes('ERR_CONNECTION_REFUSED')) {
       error.value = '❌ Cannot connect to proxy server. Make sure both servers are running.'
     }
-    
+
     isLoggedIn.value = false
   } finally {
     loading.value = false
@@ -184,18 +187,14 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
   showClassModal.value = true
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = markingPeriod
-  
-  // CRITICAL FIX: Always reset originalClassName when opening a new class modal
-  // This ensures we use the SHORT class name from the class list
+
   if (!showClassModal.value || !originalClassName.value) {
     originalClassName.value = className
   }
-  
-  // When switching quarters, use the stored original name
+
   if (markingPeriod !== 1 && originalClassName.value) {
     className = originalClassName.value
   } else {
-    // First time opening this class, store it
     originalClassName.value = className
   }
 
@@ -210,7 +209,7 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
         link: hacUrl.value,
         user: username.value,
         pass: password.value,
-        class: className, // Use the short name
+        class: className,
         markingPeriod: markingPeriod
       })
     })
@@ -221,7 +220,7 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
 
     const data = await response.json()
     console.log('📊 Class details loaded:', data.className, 'Q' + markingPeriod)
-    
+
     selectedClassDetails.value = {
       className: data.className || className,
       teacher: data.teacher || '',
@@ -250,33 +249,29 @@ function closeClassModal() {
   showClassModal.value = false
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
-  originalClassName.value = '' // Reset for next time
+  originalClassName.value = ''
 }
 
 function logout() {
-  // CRITICAL FIX: Reset ALL state when logging out
   isLoggedIn.value = false
   studentName.value = ''
   classes.value = []
   password.value = ''
   debugInfo.value = ''
   error.value = ''
-  
-  // Reset modal state
   showClassModal.value = false
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
-  originalClassName.value = '' // IMPORTANT: Clear this on logout!
-  
+  originalClassName.value = ''
   console.log('✅ Logged out - all state cleared')
 }
 
 function getGradeColor(average: number): string {
-  if (average >= 90) return darkMode.value ? 'text-green-400' : 'text-green-600'
-  if (average >= 80) return darkMode.value ? 'text-blue-400' : 'text-blue-600'
-  if (average >= 70) return darkMode.value ? 'text-yellow-400' : 'text-yellow-600'
-  if (average >= 60) return darkMode.value ? 'text-orange-400' : 'text-orange-600'
-  return darkMode.value ? 'text-red-400' : 'text-red-600'
+  if (average >= 90) return 'text-success'
+  if (average >= 80) return 'text-info'
+  if (average >= 70) return 'text-warning'
+  if (average >= 60) return 'text-warning'
+  return 'text-error'
 }
 
 function calculateGPA(): string {
@@ -288,46 +283,31 @@ function calculateGPA(): string {
 </script>
 
 <template>
-  <div :class="['min-h-screen transition-colors', darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50']">
-    <header :class="['shadow-sm border-b', darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white']">
-      <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-neutral">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-base-100 border-b border-base-300 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
           <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              HAC Wrapper 🔒
+            <h1 class="text-3xl font-bold tracking-tight text-base-content">
+              HAC Wrapper
             </h1>
-            <p :class="['text-sm', darkMode ? 'text-gray-400' : 'text-gray-600']">Secure grade access with encrypted requests</p>
+            <p class="text-sm text-base-content/60 mt-1">Secure grade access, beautifully designed</p>
           </div>
-          <div class="flex items-center gap-4">
-            <!-- Dark Mode Toggle -->
-            <button
-              @click="toggleDarkMode"
-              :class="[
-                'p-2 rounded-lg transition',
-                darkMode ? 'bg-gray-700 text-yellow-400 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              ]"
-              :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-            >
-              <svg v-if="!darkMode" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-              </svg>
-              <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-              </svg>
-            </button>
-            
-            <div v-if="isLoggedIn" class="flex items-center gap-4">
-              <div class="text-right">
-                <p :class="['text-sm', darkMode ? 'text-gray-400' : 'text-gray-600']">Logged in as</p>
-                <p :class="['font-semibold', darkMode ? 'text-white' : 'text-gray-900']">{{ studentName }}</p>
+          <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <label class="swap swap-rotate btn btn-ghost btn-circle">
+              <input type="checkbox" :checked="darkMode" @change="toggleDarkMode" />
+              <svg class="swap-off fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
+              <svg class="swap-on fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/></svg>
+            </label>
+
+            <div v-if="isLoggedIn" class="flex items-center gap-3">
+              <div class="text-right hidden sm:block">
+                <p class="text-xs text-base-content/60">Logged in as</p>
+                <p class="font-semibold text-sm">{{ studentName }}</p>
               </div>
-              <button
-                @click="logout"
-                :class="[
-                  'px-4 py-2 rounded-lg transition',
-                  darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                ]"
-              >
+              <button @click="logout" class="btn btn-ghost btn-sm">
                 Logout
               </button>
             </div>
@@ -336,167 +316,181 @@ function calculateGPA(): string {
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <div v-if="debugInfo" :class="['mb-6 p-4 rounded-lg border', darkMode ? 'bg-blue-900/50 border-blue-700' : 'bg-blue-50 border-blue-200']">
-        <p :class="['text-sm whitespace-pre-wrap', darkMode ? 'text-blue-200' : 'text-blue-800']">{{ debugInfo }}</p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Debug Info -->
+      <div v-if="debugInfo" class="alert alert-info mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span class="text-sm">{{ debugInfo }}</span>
       </div>
 
       <!-- Login Form -->
       <div v-if="!isLoggedIn" class="max-w-md mx-auto">
-        <div :class="['rounded-2xl shadow-xl p-8', darkMode ? 'bg-gray-800' : 'bg-white']">
-          <div class="text-center mb-8">
-            <div class="text-6xl mb-4">🎓</div>
-            <h2 :class="['text-2xl font-bold mb-2', darkMode ? 'text-white' : 'text-gray-900']">Login to HAC</h2>
-            <p :class="darkMode ? 'text-gray-400' : 'text-gray-600'">Enter your credentials to view your grades</p>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="text-center mb-6">
+              <div class="text-6xl mb-4">🎓</div>
+              <h2 class="card-title justify-center text-3xl font-bold tracking-tight mb-2">Login to HAC</h2>
+              <p class="text-base-content/60">Enter your credentials to view grades</p>
+            </div>
+
+            <form @submit.prevent="login" class="space-y-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">HAC URL</span>
+                </label>
+                <input
+                  v-model="hacUrl"
+                  type="url"
+                  required
+                  placeholder="https://hac.eths.k12.il.us/"
+                  class="input input-bordered w-full"
+                />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Username</span>
+                </label>
+                <input
+                  v-model="username"
+                  type="text"
+                  required
+                  autocomplete="username"
+                  placeholder="Your username"
+                  class="input input-bordered w-full"
+                />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Password</span>
+                </label>
+                <input
+                  v-model="password"
+                  type="password"
+                  required
+                  autocomplete="current-password"
+                  placeholder="Your password"
+                  class="input input-bordered w-full"
+                />
+              </div>
+
+              <button
+                type="submit"
+                :disabled="loading"
+                class="btn btn-primary w-full font-semibold"
+              >
+                <span v-if="loading" class="loading loading-spinner"></span>
+                {{ loading ? 'Logging in...' : 'Login' }}
+              </button>
+
+              <div v-if="error" class="alert alert-error">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span class="text-sm">{{ error }}</span>
+              </div>
+
+              <div class="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span class="text-xs"><strong>Secure:</strong> Your credentials are encrypted</span>
+              </div>
+            </form>
           </div>
-
-          <form @submit.prevent="login" class="space-y-6">
-            <div>
-              <label :class="['block text-sm font-medium mb-2', darkMode ? 'text-gray-300' : 'text-gray-700']">HAC URL</label>
-              <input
-                v-model="hacUrl"
-                type="url"
-                required
-                :class="[
-                  'w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                  darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border border-gray-300'
-                ]"
-                placeholder="https://hac.eths.k12.il.us/"
-              />
-            </div>
-
-            <div>
-              <label :class="['block text-sm font-medium mb-2', darkMode ? 'text-gray-300' : 'text-gray-700']">Username</label>
-              <input
-                v-model="username"
-                type="text"
-                required
-                autocomplete="username"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                  darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border border-gray-300'
-                ]"
-                placeholder="Your username"
-              />
-            </div>
-
-            <div>
-              <label :class="['block text-sm font-medium mb-2', darkMode ? 'text-gray-300' : 'text-gray-700']">Password</label>
-              <input
-                v-model="password"
-                type="password"
-                required
-                autocomplete="current-password"
-                :class="[
-                  'w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                  darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border border-gray-300'
-                ]"
-                placeholder="Your password"
-              />
-            </div>
-
-            <button
-              type="submit"
-              :disabled="loading"
-              class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md transition disabled:opacity-50"
-            >
-              {{ loading ? 'Logging in...' : 'Login' }}
-            </button>
-
-            <div v-if="error" :class="['p-4 rounded-lg border', darkMode ? 'bg-red-900/50 border-red-700' : 'bg-red-50 border-red-200']">
-              <p :class="['text-sm whitespace-pre-wrap', darkMode ? 'text-red-200' : 'text-red-800']">{{ error }}</p>
-            </div>
-
-            <div :class="['rounded-lg p-4 border', darkMode ? 'bg-green-900/50 border-green-700' : 'bg-green-50 border-green-200']">
-              <p :class="['text-xs flex items-center gap-2', darkMode ? 'text-green-200' : 'text-green-800']">
-                <span>🔒</span>
-                <span><strong>Secure:</strong> Your credentials are sent via encrypted POST requests, never exposed in URLs</span>
-              </p>
-            </div>
-          </form>
         </div>
       </div>
 
       <!-- Dashboard -->
-      <div v-else class="space-y-6">
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Welcome back, {{ studentName }}! 👋</h2>
-          <p class="text-blue-100">Here's your current grades</p>
+      <div v-else class="space-y-8">
+        <!-- Welcome Card -->
+        <div class="card bg-primary shadow-xl">
+          <div class="card-body">
+            <h2 class="hero-text text-primary-content">Welcome back, {{ studentName }}! 👋</h2>
+            <p class="text-primary-content/80">Here's your academic overview</p>
+          </div>
         </div>
 
+        <!-- Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div :class="['rounded-xl shadow-md p-6', darkMode ? 'bg-gray-800' : 'bg-white']">
-            <div class="flex items-center justify-between">
-              <div>
-                <p :class="['text-sm mb-1', darkMode ? 'text-gray-400' : 'text-gray-600']">Total Classes</p>
-                <p :class="['text-3xl font-bold', darkMode ? 'text-white' : 'text-gray-900']">{{ classes.length }}</p>
-              </div>
-              <div class="text-4xl">📚</div>
+          <div class="stats shadow-md bg-base-100">
+            <div class="stat">
+              <div class="stat-figure text-4xl">📚</div>
+              <div class="stat-title">Total Classes</div>
+              <div class="stat-value tabular-nums">{{ classes.length }}</div>
             </div>
           </div>
 
-          <div :class="['rounded-xl shadow-md p-6', darkMode ? 'bg-gray-800' : 'bg-white']">
-            <div class="flex items-center justify-between">
-              <div>
-                <p :class="['text-sm mb-1', darkMode ? 'text-gray-400' : 'text-gray-600']">Average</p>
-                <p :class="['text-3xl font-bold', darkMode ? 'text-white' : 'text-gray-900']">{{ calculateGPA() }}</p>
-              </div>
-              <div class="text-4xl">📊</div>
+          <div class="stats shadow-md bg-base-100">
+            <div class="stat">
+              <div class="stat-figure text-4xl">📊</div>
+              <div class="stat-title">Average</div>
+              <div class="stat-value tabular-nums">{{ calculateGPA() }}</div>
             </div>
           </div>
 
-          <div :class="['rounded-xl shadow-md p-6', darkMode ? 'bg-gray-800' : 'bg-white']">
-            <div class="flex items-center justify-between">
-              <div>
-                <p :class="['text-sm mb-1', darkMode ? 'text-gray-400' : 'text-gray-600']">Graded</p>
-                <p :class="['text-3xl font-bold', darkMode ? 'text-white' : 'text-gray-900']">{{ classes.filter(c => c.hasGrade).length }}</p>
-              </div>
-              <div class="text-4xl">✅</div>
+          <div class="stats shadow-md bg-base-100">
+            <div class="stat">
+              <div class="stat-figure text-4xl">✅</div>
+              <div class="stat-title">Graded</div>
+              <div class="stat-value tabular-nums">{{ classes.filter(c => c.hasGrade).length }}</div>
             </div>
           </div>
         </div>
 
-        <div :class="['rounded-2xl shadow-xl overflow-hidden', darkMode ? 'bg-gray-800' : 'bg-white']">
-          <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600">
-            <h3 class="text-xl font-bold text-white">Your Classes</h3>
+        <!-- Classes Grid -->
+        <div>
+          <h3 class="section-header mb-6">Your Classes</h3>
+
+          <div v-if="classes.length === 0" class="card bg-base-100 shadow-md">
+            <div class="card-body text-center py-12">
+              <p class="text-base-content/60">No classes found</p>
+            </div>
           </div>
 
-          <div v-if="classes.length === 0" :class="['p-8 text-center', darkMode ? 'text-gray-400' : 'text-gray-500']">
-            No classes found
-          </div>
-
-          <div v-else :class="['divide-y', darkMode ? 'divide-gray-700' : '']">
-            <div 
-              v-for="cls in classes" 
-              :key="cls.classId" 
-              :class="['p-6 transition cursor-pointer', darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50']"
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              v-for="cls in classes"
+              :key="cls.classId"
+              class="card-custom cursor-pointer"
               @click="viewClassDetails(cls.className)"
             >
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <div class="flex items-center gap-3 mb-2 flex-wrap">
-                    <h4 :class="['text-lg font-semibold', darkMode ? 'text-white' : 'text-gray-900']">{{ cls.className }}</h4>
-                    <span :class="['px-2 py-1 text-xs rounded-full', darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100']">{{ cls.courseCode }}</span>
-                    <span class="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs rounded-full">Period {{ cls.period }}</span>
+              <div class="flex justify-between items-start mb-4">
+                <div class="flex-1 pr-4">
+                  <h4 class="text-lg font-semibold mb-2 leading-tight">{{ cls.className }}</h4>
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    <div class="badge badge-outline badge-sm">{{ cls.courseCode }}</div>
+                    <div class="badge badge-info badge-sm">Period {{ cls.period }}</div>
                   </div>
-
-                  <div :class="['flex items-center gap-2 text-sm', darkMode ? 'text-gray-400' : 'text-gray-600']">
+                  <p class="text-sm text-base-content/60 flex items-center gap-1">
                     <span>👨‍🏫</span>
-                    <a :href="`mailto:${cls.teacherEmail}`" :class="['hover:underline', darkMode ? 'hover:text-blue-400' : 'hover:text-blue-600']" @click.stop>
+                    <a :href="`mailto:${cls.teacherEmail}`" class="hover:underline" @click.stop>
                       {{ cls.teacher }}
                     </a>
-                  </div>
-                  
-                  <p :class="['text-xs mt-2', darkMode ? 'text-gray-500' : 'text-gray-500']">Click to view assignments</p>
+                  </p>
                 </div>
 
-                <div class="text-right ml-4">
-                  <div v-if="cls.hasGrade" :class="['text-3xl font-bold', getGradeColor(cls.average)]">
-                    {{ cls.grade }}
+                <div v-if="cls.hasGrade" class="text-right">
+                  <div :class="['text-4xl font-bold tabular-nums', getGradeColor(cls.average)]">
+                    {{ cls.average.toFixed(1) }}
                   </div>
-                  <div v-else :class="['text-2xl', darkMode ? 'text-gray-600' : 'text-gray-400']">N/A</div>
+                  <div class="text-xs text-base-content/60 mt-1">{{ cls.grade }}</div>
+                </div>
+                <div v-else class="text-right">
+                  <div class="text-3xl text-base-content/20">N/A</div>
                 </div>
               </div>
+
+              <!-- Progress indicator -->
+              <div v-if="cls.hasGrade" class="w-full bg-base-200 rounded-full h-2">
+                <div
+                  :class="['h-2 rounded-full transition-all',
+                    cls.average >= 90 ? 'bg-success' :
+                    cls.average >= 80 ? 'bg-info' :
+                    cls.average >= 70 ? 'bg-warning' : 'bg-error'
+                  ]"
+                  :style="{ width: `${Math.min(cls.average, 100)}%` }"
+                ></div>
+              </div>
+
+              <p class="text-xs text-center text-base-content/40 mt-3">Click to view assignments</p>
             </div>
           </div>
         </div>
@@ -504,117 +498,100 @@ function calculateGPA(): string {
     </main>
 
     <!-- Class Details Modal -->
-    <div 
-      v-if="showClassModal" 
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-      @click.self="closeClassModal"
-    >
-      <div :class="['rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col', darkMode ? 'bg-gray-800' : 'bg-white']">
+    <div v-if="showClassModal" class="modal modal-open">
+      <div class="modal-box max-w-5xl">
         <!-- Modal Header -->
-        <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white flex justify-between items-center">
+        <div class="flex justify-between items-start mb-6">
           <div>
-            <h2 class="text-2xl font-bold">{{ selectedClassDetails?.className || 'Loading...' }}</h2>
-            <p class="text-sm text-blue-100" v-if="selectedClassDetails && selectedClassDetails.teacher">
+            <h3 class="text-2xl font-bold">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
+            <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-sm text-base-content/60 mt-1">
               {{ selectedClassDetails.teacher }}
             </p>
           </div>
-          <button @click="closeClassModal" class="text-white hover:bg-white/20 rounded-lg p-2 transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
+          <button @click="closeClassModal" class="btn btn-ghost btn-sm btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
-        <!-- Quarter Selector -->
-        <div :class="['px-6 py-3 border-b flex items-center gap-4', darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50']">
-          <span :class="['text-sm font-medium', darkMode ? 'text-gray-300' : 'text-gray-700']">Quarter:</span>
-          <div class="flex gap-2">
-            <button
-              v-for="mp in [1, 2, 3, 4]"
-              :key="mp"
-              @click="changeMarkingPeriod(mp)"
-              :class="[
-                'px-4 py-2 rounded-lg text-sm font-medium transition',
-                selectedMarkingPeriod === mp
-                  ? 'bg-blue-600 text-white'
-                  : darkMode 
-                    ? 'bg-gray-600 text-gray-200 hover:bg-gray-500 border border-gray-500'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-              ]"
-              :disabled="loadingDetails"
-            >
-              Q{{ mp }}
-            </button>
-          </div>
+        <!-- Quarter Tabs -->
+        <div class="tabs tabs-boxed mb-6">
+          <button
+            v-for="mp in [1, 2, 3, 4]"
+            :key="mp"
+            @click="changeMarkingPeriod(mp)"
+            :class="['tab', selectedMarkingPeriod === mp ? 'tab-active' : '']"
+            :disabled="loadingDetails"
+          >
+            Q{{ mp }}
+          </button>
         </div>
 
-        <!-- Modal Content -->
-        <div class="flex-1 overflow-y-auto p-6">
-          <!-- Loading State -->
-          <div v-if="loadingDetails" class="flex flex-col items-center justify-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-            <p :class="darkMode ? 'text-gray-400' : 'text-gray-600'">Loading assignments...</p>
-          </div>
+        <!-- Loading State -->
+        <div v-if="loadingDetails" class="flex flex-col items-center justify-center py-12">
+          <span class="loading loading-spinner loading-lg text-primary"></span>
+          <p class="text-base-content/60 mt-4">Loading assignments...</p>
+        </div>
 
-          <!-- Class Details Content -->
-          <div v-else-if="selectedClassDetails" class="space-y-6">
-            <!-- Average Info -->
-            <div :class="['rounded-lg p-4 flex justify-between items-center', darkMode ? 'bg-blue-900/50' : 'bg-blue-50']">
-              <div>
-                <p :class="['text-sm', darkMode ? 'text-gray-300' : 'text-gray-600']">Quarter {{ selectedMarkingPeriod }} Average</p>
-                <p :class="['text-3xl font-bold', darkMode ? 'text-blue-400' : 'text-blue-600']">{{ selectedClassDetails.average }}</p>
-              </div>
-              <div :class="['text-right text-sm', darkMode ? 'text-gray-400' : 'text-gray-500']" v-if="selectedClassDetails.lastUpdated">
+        <!-- Class Details Content -->
+        <div v-else-if="selectedClassDetails" class="space-y-6">
+          <!-- Average Card -->
+          <div class="stats shadow bg-primary w-full">
+            <div class="stat">
+              <div class="stat-title text-primary-content/80">Quarter {{ selectedMarkingPeriod }} Average</div>
+              <div class="stat-value text-primary-content tabular-nums">{{ selectedClassDetails.average }}</div>
+              <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60">
                 Last Updated: {{ selectedClassDetails.lastUpdated }}
               </div>
             </div>
+          </div>
 
-            <!-- Assignments Table -->
-            <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
-              <h3 :class="['text-lg font-bold mb-3', darkMode ? 'text-white' : 'text-gray-900']">Assignments ({{ selectedClassDetails.assignments.length }})</h3>
-              <div class="overflow-x-auto">
-                <table :class="['w-full border-collapse border', darkMode ? 'border-gray-600' : 'border-gray-300']">
-                  <thead :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
-                    <tr>
-                      <th :class="['border px-3 py-2 text-left text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Date Due</th>
-                      <th :class="['border px-3 py-2 text-left text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Assignment</th>
-                      <th :class="['border px-3 py-2 text-left text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Category</th>
-                      <th :class="['border px-3 py-2 text-center text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Score</th>
-                      <th :class="['border px-3 py-2 text-center text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Total Points</th>
-                      <th :class="['border px-3 py-2 text-center text-sm font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">Percentage</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(assignment, idx) in selectedClassDetails.assignments" :key="idx" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'">
-                      <td :class="['border px-3 py-2 text-sm', darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-300']">{{ assignment.dateDue }}</td>
-                      <td :class="['border px-3 py-2 text-sm font-medium', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">{{ assignment.name }}</td>
-                      <td :class="['border px-3 py-2 text-sm', darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-300']">{{ assignment.category }}</td>
-                      <td :class="['border px-3 py-2 text-sm text-center', darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-300']">{{ assignment.score }}</td>
-                      <td :class="['border px-3 py-2 text-sm text-center', darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-300']">{{ assignment.totalPoints }}</td>
-                      <td :class="['border px-3 py-2 text-sm text-center font-semibold', darkMode ? 'border-gray-600 text-gray-200' : 'border-gray-300']">{{ assignment.percentage }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          <!-- Assignments Table -->
+          <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
+            <h4 class="font-bold text-lg mb-3">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra">
+                <thead>
+                  <tr>
+                    <th>Due Date</th>
+                    <th>Assignment</th>
+                    <th>Category</th>
+                    <th class="text-center">Score</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(assignment, idx) in selectedClassDetails.assignments" :key="idx">
+                    <td class="text-sm">{{ assignment.dateDue }}</td>
+                    <td class="font-medium">{{ assignment.name }}</td>
+                    <td class="text-sm">{{ assignment.category }}</td>
+                    <td class="text-center tabular-nums">{{ assignment.score }}</td>
+                    <td class="text-center tabular-nums">{{ assignment.totalPoints }}</td>
+                    <td class="text-center font-semibold tabular-nums">{{ assignment.percentage }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div v-else>
-              <p :class="['text-center py-8', darkMode ? 'text-gray-400' : 'text-gray-500']">No assignments found for Quarter {{ selectedMarkingPeriod }}.</p>
-            </div>
+          </div>
+          <div v-else class="text-center py-8 text-base-content/60">
+            No assignments found for Quarter {{ selectedMarkingPeriod }}
+          </div>
 
-            <!-- Categories -->
-            <div v-if="selectedClassDetails.categories && selectedClassDetails.categories.length > 0">
-              <h3 :class="['text-lg font-bold mb-3', darkMode ? 'text-white' : 'text-gray-900']">Categories</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div 
-                  v-for="(category, idx) in selectedClassDetails.categories" 
-                  :key="idx"
-                  :class="['rounded-lg p-4', darkMode ? 'bg-gray-700' : 'bg-gray-50']"
-                >
+          <!-- Categories -->
+          <div v-if="selectedClassDetails.categories && selectedClassDetails.categories.length > 0">
+            <h4 class="font-bold text-lg mb-3">Categories</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                v-for="(category, idx) in selectedClassDetails.categories"
+                :key="idx"
+                class="card bg-base-200"
+              >
+                <div class="card-body py-4">
                   <div class="flex justify-between items-center">
-                    <span :class="['font-semibold', darkMode ? 'text-gray-200' : 'text-gray-900']">{{ category.name }}</span>
-                    <span :class="['text-lg font-bold', darkMode ? 'text-blue-400' : 'text-blue-600']">{{ category.percentage }}</span>
+                    <span class="font-semibold">{{ category.name }}</span>
+                    <span class="text-lg font-bold text-primary tabular-nums">{{ category.percentage }}</span>
                   </div>
-                  <p :class="['text-sm mt-1', darkMode ? 'text-gray-400' : 'text-gray-600']">
+                  <p class="text-sm text-base-content/60 tabular-nums">
                     {{ category.points }} / {{ category.maxPoints }} points
                   </p>
                 </div>
@@ -623,6 +600,9 @@ function calculateGPA(): string {
           </div>
         </div>
       </div>
+      <form method="dialog" class="modal-backdrop" @click="closeClassModal">
+        <button>close</button>
+      </form>
     </div>
   </div>
 </template>
