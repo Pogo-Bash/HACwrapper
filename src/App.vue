@@ -53,7 +53,6 @@ const loading = ref(false)
 const loadingDetails = ref(false)
 const error = ref('')
 const isLoggedIn = ref(false)
-const debugInfo = ref('')
 const showClassModal = ref(false)
 const selectedMarkingPeriod = ref(1)
 const originalClassName = ref('')
@@ -66,17 +65,6 @@ onMounted(async () => {
 
   const savedUsername = localStorage.getItem('hacUsername')
   if (savedUsername) username.value = savedUsername
-
-  try {
-    debugInfo.value = 'Testing proxy connection...'
-    const response = await fetch('/api/health')
-    const data = await response.json()
-    debugInfo.value = `✅ ${data.status}`
-    console.log('Proxy test:', data)
-  } catch (err) {
-    debugInfo.value = '❌ Proxy not reachable. Check that both servers are running.'
-    console.error('Proxy connection failed:', err)
-  }
 })
 
 function toggleDarkMode() {
@@ -104,11 +92,9 @@ async function login() {
 
   loading.value = true
   error.value = ''
-  debugInfo.value = ''
 
   try {
     localStorage.setItem('hacUsername', username.value)
-    debugInfo.value = 'Logging in securely...'
 
     const nameResponse = await fetch('/api/name', {
       method: 'POST',
@@ -136,12 +122,9 @@ async function login() {
     if (nameData.name && nameData.name !== 'Student') {
       studentName.value = nameData.name
       isLoggedIn.value = true
-      debugInfo.value = `✅ Logged in as ${nameData.name}`
     } else {
       throw new Error('Login failed - check your credentials')
     }
-
-    debugInfo.value = 'Fetching classes...'
 
     const classesResponse = await fetch('/api/classaverage', {
       method: 'POST',
@@ -164,7 +147,6 @@ async function login() {
 
     if (Array.isArray(classesData)) {
       classes.value = classesData
-      debugInfo.value = `✅ Loaded ${classesData.length} classes`
     }
 
   } catch (err) {
@@ -256,7 +238,6 @@ function logout() {
   studentName.value = ''
   classes.value = []
   password.value = ''
-  debugInfo.value = ''
   error.value = ''
   showClassModal.value = false
   selectedClassDetails.value = null
@@ -316,12 +297,6 @@ function calculateGPA(): string {
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-      <!-- Debug Info -->
-      <div v-if="debugInfo" class="alert alert-info mb-8 py-4 px-6">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span class="text-sm">{{ debugInfo }}</span>
-      </div>
-
       <!-- Login Form -->
       <div v-if="!isLoggedIn" class="max-w-md mx-auto">
         <div class="card bg-base-100 shadow-xl">
@@ -387,11 +362,6 @@ function calculateGPA(): string {
                 <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span class="text-sm">{{ error }}</span>
               </div>
-
-              <div class="alert alert-success py-4 px-6 mt-5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span class="text-xs"><strong>Secure:</strong> Your credentials are encrypted</span>
-              </div>
             </form>
           </div>
         </div>
@@ -453,29 +423,31 @@ function calculateGPA(): string {
               class="card bg-base-100 shadow-lg rounded-2xl p-6 md:p-8 cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1"
               @click="viewClassDetails(cls.className)"
             >
-              <div class="flex justify-between items-start mb-6">
-                <div class="flex-1 pr-6">
-                  <h4 class="text-xl font-semibold mb-3 leading-tight">{{ cls.className }}</h4>
+              <div class="flex justify-between items-start gap-4 mb-6">
+                <!-- Left side: Content (can shrink) -->
+                <div class="flex-1 min-w-0">
+                  <h4 class="text-xl font-semibold mb-3 leading-tight break-words">
+                    {{ cls.className }}
+                  </h4>
                   <div class="flex flex-wrap gap-2 mb-4">
-                    <div class="badge badge-outline badge-md px-3 py-3 text-xs">{{ cls.courseCode }}</div>
-                    <div class="badge badge-info badge-md px-3 py-3 text-xs">Period {{ cls.period }}</div>
+                    <div class="badge badge-outline badge-sm px-3 py-2 text-xs">{{ cls.courseCode }}</div>
+                    <div class="badge badge-info badge-sm px-3 py-2 text-xs">Period {{ cls.period }}</div>
                   </div>
                   <p class="text-sm text-base-content/60 flex items-center gap-2 mt-3">
                     <span>👨‍🏫</span>
-                    <a :href="`mailto:${cls.teacherEmail}`" class="hover:underline" @click.stop>
-                      {{ cls.teacher }}
-                    </a>
+                    <span class="truncate">{{ cls.teacher }}</span>
                   </p>
                 </div>
 
-                <div v-if="cls.hasGrade" class="text-right min-w-[80px]">
-                  <div :class="['text-5xl font-bold tabular-nums mb-2', getGradeColor(cls.average)]">
+                <!-- Right side: Grade (never shrinks) -->
+                <div v-if="cls.hasGrade" class="text-right flex-shrink-0 w-24">
+                  <div :class="['text-5xl font-bold tabular-nums leading-none mb-2', getGradeColor(cls.average)]">
                     {{ cls.average.toFixed(1) }}
                   </div>
                   <div class="text-xs text-base-content/60">{{ cls.grade }}</div>
                 </div>
-                <div v-else class="text-right min-w-[80px]">
-                  <div class="text-4xl text-base-content/20">N/A</div>
+                <div v-else class="text-right flex-shrink-0 w-24">
+                  <div class="text-4xl text-base-content/20 leading-none">N/A</div>
                 </div>
               </div>
 
