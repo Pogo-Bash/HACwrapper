@@ -4,6 +4,11 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import compression from 'compression';
 import { LRUCache } from 'lru-cache';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -36,7 +41,15 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-const PORT = 3001;
+// Use environment PORT variable (critical for Render deployment)
+const PORT = process.env.PORT || 3001;
+
+// ==========================================
+// SERVE STATIC FILES (Built Frontend)
+// ==========================================
+// Serve static files from dist directory
+const distPath = path.join(__dirname, 'dist');
+app.use(express.static(distPath));
 
 // ==========================================
 // CACHING SETUP
@@ -451,7 +464,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'Proxy server is healthy ✅',
     cache: {
       size: cache.size,
@@ -460,10 +473,17 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n⚡ ETHS HAC Proxy v8.0 - OPTIMIZED`);
-  console.log(`📍 http://localhost:${PORT}`);
+// Serve index.html for all other routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n⚡ ETHS HAC Proxy v8.0 - PRODUCTION READY FOR RENDER`);
+  console.log(`📍 Running on port ${PORT}`);
   console.log(`✅ Compression: Enabled`);
   console.log(`✅ Caching: LRU (5 min TTL)`);
-  console.log(`✅ Max cache size: 500 items\n`);
+  console.log(`✅ Max cache size: 500 items`);
+  console.log(`✅ Static files: ${distPath}`);
+  console.log(`✅ Environment: ${process.env.NODE_ENV || 'development'}\n`);
 });
