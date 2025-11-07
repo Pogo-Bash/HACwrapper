@@ -474,7 +474,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve index.html for all other routes (SPA fallback)
-app.get('*', (req, res) => {
+// Note: Express 5 requires a different wildcard syntax
+app.use((req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
