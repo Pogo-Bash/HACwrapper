@@ -18,15 +18,14 @@ export class HACApiService {
   private static readonly BASE_URL = '/api';
 
   /**
-   * Build query parameters for API requests
+   * Build request body for API requests (POST with JSON)
    */
-  private static buildQueryParams(credentials: HACCredentials): string {
-    const params = new URLSearchParams({
+  private static buildRequestBody(credentials: HACCredentials): string {
+    return JSON.stringify({
       link: credentials.hacUrl,
       user: credentials.username,
-      pass: credentials.password,
+      pass: credentials.password, // No encoding - credentials passed as-is in JSON
     });
-    return params.toString();
   }
 
   /**
@@ -37,10 +36,15 @@ export class HACApiService {
     credentials: HACCredentials
   ): Promise<HACApiResponse<T>> {
     try {
-      const queryParams = this.buildQueryParams(credentials);
-      const url = `${this.BASE_URL}/${endpoint}?${queryParams}`;
+      const url = `${this.BASE_URL}/${endpoint}`;
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: this.buildRequestBody(credentials),
+      });
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -99,20 +103,31 @@ export class HACApiService {
     credentials: HACCredentials,
     classId: string
   ): Promise<HACApiResponse<ClassGrades>> {
-    const queryParams = this.buildQueryParams(credentials);
-    const url = `${this.BASE_URL}/classgrade?${queryParams}&class=${encodeURIComponent(classId)}`;
+    const url = `${this.BASE_URL}/classgrade`;
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          link: credentials.hacUrl,
+          user: credentials.username,
+          pass: credentials.password,
+          class: classId, // Include class ID in POST body
+        }),
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      
+
       if (data.error) {
         return { success: false, error: data.error };
       }
-      
+
       return { success: true, data };
     } catch (error) {
       return {
