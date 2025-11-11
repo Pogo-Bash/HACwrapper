@@ -154,8 +154,12 @@ async function login() {
     console.error('Login error:', err)
     error.value = err instanceof Error ? err.message : 'Failed to fetch data'
 
-    if (error.value.includes('Failed to fetch') || error.value.includes('ERR_CONNECTION_REFUSED')) {
-      error.value = '❌ Cannot connect to proxy server. Make sure both servers are running.'
+    if (error.value.includes('Failed to fetch')) {
+      error.value = '❌ Network error: Cannot connect to server. Please check your internet connection.'
+    } else if (error.value.includes('ERR_CONNECTION_REFUSED')) {
+      error.value = '❌ Connection refused: Server may be offline or unreachable.'
+    } else if (error.value.includes('CORS')) {
+      error.value = '❌ CORS error: Browser security blocking request. Try clearing cache or using a different browser.'
     }
 
     isLoggedIn.value = false
