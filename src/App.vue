@@ -95,7 +95,7 @@ async function login() {
   error.value = ''
 
   try {
-    localStorage.setItem('hacUsername', username.value)
+    localStorage.setItem('hacUsername', username.value.trim())
 
     const nameResponse = await fetch('/api/name', {
       method: 'POST',
@@ -104,9 +104,9 @@ async function login() {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value,
-        user: username.value,
-        pass: password.value
+        link: hacUrl.value.trim(),
+        user: username.value.trim(),
+        pass: password.value.trim()
       })
     })
 
@@ -134,9 +134,9 @@ async function login() {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value,
-        user: username.value,
-        pass: password.value
+        link: hacUrl.value.trim(),
+        user: username.value.trim(),
+        pass: password.value.trim()
       })
     })
 
@@ -192,9 +192,9 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value,
-        user: username.value,
-        pass: password.value,
+        link: hacUrl.value.trim(),
+        user: username.value.trim(),
+        pass: password.value.trim(),
         class: className,
         markingPeriod: markingPeriod
       })
@@ -477,13 +477,13 @@ const sortedAssignments = computed(() => {
                 </div>
 
                 <!-- Right side: Grade (never shrinks) -->
-                <div v-if="cls.hasGrade" class="text-right flex-shrink-0 w-24">
-                  <div :class="['text-5xl font-bold tabular-nums leading-none mb-2', getGradeColor(cls.average)]">
+                <div v-if="cls.hasGrade" class="text-right flex-shrink-0 w-28">
+                  <div :class="['text-4xl font-bold tabular-nums leading-none mb-2', getGradeColor(cls.average)]">
                     {{ cls.average.toFixed(1) }}
                   </div>
                   <div class="text-xs text-base-content/60">{{ cls.grade }}</div>
                 </div>
-                <div v-else class="text-right flex-shrink-0 w-24">
+                <div v-else class="text-right flex-shrink-0 w-28">
                   <div class="text-4xl text-base-content/20 leading-none">N/A</div>
                 </div>
               </div>
