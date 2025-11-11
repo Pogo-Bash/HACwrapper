@@ -57,6 +57,7 @@ const showClassModal = ref(false)
 const selectedMarkingPeriod = ref(1)
 const originalClassName = ref('')
 const darkMode = ref(false)
+const assignmentSortBy = ref<'date' | 'grade-low' | 'grade-high' | 'alpha'>('date')
 
 onMounted(async () => {
   const savedTheme = localStorage.getItem('theme')
@@ -260,6 +261,36 @@ function calculateGPA(): string {
   const sum = gradedClasses.reduce((acc, c) => acc + c.average, 0)
   return (sum / gradedClasses.length).toFixed(1)
 }
+
+const sortedAssignments = computed(() => {
+  if (!selectedClassDetails.value?.assignments) return []
+
+  const assignments = [...selectedClassDetails.value.assignments]
+
+  switch (assignmentSortBy.value) {
+    case 'grade-low':
+      return assignments.sort((a, b) => {
+        const percentA = parseFloat(a.percentage) || 0
+        const percentB = parseFloat(b.percentage) || 0
+        return percentA - percentB
+      })
+    case 'grade-high':
+      return assignments.sort((a, b) => {
+        const percentA = parseFloat(a.percentage) || 0
+        const percentB = parseFloat(b.percentage) || 0
+        return percentB - percentA
+      })
+    case 'alpha':
+      return assignments.sort((a, b) => a.name.localeCompare(b.name))
+    case 'date':
+    default:
+      return assignments.sort((a, b) => {
+        const dateA = new Date(a.dateAssigned).getTime() || 0
+        const dateB = new Date(b.dateAssigned).getTime() || 0
+        return dateB - dateA // Most recent first
+      })
+  }
+})
 </script>
 
 <template>
@@ -316,8 +347,9 @@ function calculateGPA(): string {
                   v-model="hacUrl"
                   type="url"
                   required
+                  inputmode="url"
                   placeholder="https://hac.eths.k12.il.us/"
-                  class="input input-bordered input-lg w-full"
+                  class="input input-bordered input-lg w-full touch-manipulation"
                 />
               </div>
 
@@ -329,9 +361,10 @@ function calculateGPA(): string {
                   v-model="username"
                   type="text"
                   required
+                  inputmode="text"
                   autocomplete="username"
                   placeholder="Your username"
-                  class="input input-bordered input-lg w-full"
+                  class="input input-bordered input-lg w-full touch-manipulation"
                 />
               </div>
 
@@ -345,7 +378,7 @@ function calculateGPA(): string {
                   required
                   autocomplete="current-password"
                   placeholder="Your password"
-                  class="input input-bordered input-lg w-full"
+                  class="input input-bordered input-lg w-full touch-manipulation"
                 />
               </div>
 
@@ -494,7 +527,12 @@ function calculateGPA(): string {
             v-for="mp in [1, 2, 3, 4]"
             :key="mp"
             @click="changeMarkingPeriod(mp)"
-            :class="['tab tab-lg px-6 py-3', selectedMarkingPeriod === mp ? 'tab-active' : '']"
+            :class="[
+              'tab tab-lg px-6 py-3 transition-all',
+              selectedMarkingPeriod === mp
+                ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg scale-105'
+                : 'hover:bg-base-300'
+            ]"
             :disabled="loadingDetails"
           >
             Q{{ mp }}
@@ -526,7 +564,20 @@ function calculateGPA(): string {
 
           <!-- Assignments Table -->
           <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
-            <h4 class="font-bold text-xl mb-6">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+              <h4 class="font-bold text-xl">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
+              <div class="form-control">
+                <label class="label pb-1">
+                  <span class="label-text text-sm font-medium">Sort by:</span>
+                </label>
+                <select v-model="assignmentSortBy" class="select select-bordered select-sm">
+                  <option value="date">Date Assigned (Newest)</option>
+                  <option value="grade-low">Grade (Lowest First)</option>
+                  <option value="grade-high">Grade (Highest First)</option>
+                  <option value="alpha">Alphabetical</option>
+                </select>
+              </div>
+            </div>
             <div class="overflow-x-auto">
               <table class="table table-zebra">
                 <thead>
@@ -540,7 +591,7 @@ function calculateGPA(): string {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(assignment, idx) in selectedClassDetails.assignments" :key="idx">
+                  <tr v-for="(assignment, idx) in sortedAssignments" :key="idx">
                     <td class="py-5 text-sm">{{ assignment.dateDue }}</td>
                     <td class="py-5 font-medium">{{ assignment.name }}</td>
                     <td class="py-5 text-sm">{{ assignment.category }}</td>
