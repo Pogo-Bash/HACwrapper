@@ -259,11 +259,46 @@ function getGradeColor(average: number): string {
   return 'text-error'
 }
 
-function calculateGPA(): string {
+function isHonorsOrAP(className: string): boolean {
+  // Match "AP" or standalone "H" as whole words in the class name
+  return /\b(AP|H)\b/i.test(className)
+}
+
+function percentageToGPA(average: number, isWeighted: boolean = false): number {
+  let gpa = 0
+  if (average >= 90) gpa = 4.0
+  else if (average >= 80) gpa = 3.0
+  else if (average >= 70) gpa = 2.0
+  else if (average >= 60) gpa = 1.0
+  else gpa = 0.0
+
+  // Add 1.0 point for weighted (H/AP) classes
+  if (isWeighted && gpa > 0) gpa += 1.0
+
+  return gpa
+}
+
+function calculateUnweightedGPA(): string {
   const gradedClasses = classes.value.filter(c => c.hasGrade)
   if (gradedClasses.length === 0) return 'N/A'
-  const sum = gradedClasses.reduce((acc, c) => acc + c.average, 0)
-  return (sum / gradedClasses.length).toFixed(1)
+
+  const totalGPA = gradedClasses.reduce((acc, c) => {
+    return acc + percentageToGPA(c.average, false)
+  }, 0)
+
+  return (totalGPA / gradedClasses.length).toFixed(2)
+}
+
+function calculateWeightedGPA(): string {
+  const gradedClasses = classes.value.filter(c => c.hasGrade)
+  if (gradedClasses.length === 0) return 'N/A'
+
+  const totalGPA = gradedClasses.reduce((acc, c) => {
+    const isWeighted = isHonorsOrAP(c.className)
+    return acc + percentageToGPA(c.average, isWeighted)
+  }, 0)
+
+  return (totalGPA / gradedClasses.length).toFixed(2)
 }
 
 const sortedAssignments = computed(() => {
@@ -420,24 +455,26 @@ const sortedAssignments = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           <div class="stats shadow-lg bg-base-100">
             <div class="stat p-6 md:p-8">
-              <div class="stat-figure text-5xl mb-4">📚</div>
-              <div class="stat-title text-base mb-3">Total Classes</div>
-              <div class="stat-value text-5xl tabular-nums">{{ classes.length }}</div>
+              <div class="stat-figure text-5xl mb-4">📊</div>
+              <div class="stat-title text-base mb-3">Unweighted GPA</div>
+              <div class="stat-value text-5xl tabular-nums">{{ calculateUnweightedGPA() }}</div>
+              <div class="stat-desc text-sm mt-2">Out of 4.0</div>
             </div>
           </div>
 
           <div class="stats shadow-lg bg-base-100">
             <div class="stat p-6 md:p-8">
-              <div class="stat-figure text-5xl mb-4">📊</div>
-              <div class="stat-title text-base mb-3">Average</div>
-              <div class="stat-value text-5xl tabular-nums">{{ calculateGPA() }}</div>
+              <div class="stat-figure text-5xl mb-4">⭐</div>
+              <div class="stat-title text-base mb-3">Weighted GPA</div>
+              <div class="stat-value text-5xl tabular-nums">{{ calculateWeightedGPA() }}</div>
+              <div class="stat-desc text-sm mt-2">Out of 5.0 (H/AP)</div>
             </div>
           </div>
 
           <div class="stats shadow-lg bg-base-100">
             <div class="stat p-6 md:p-8">
               <div class="stat-figure text-5xl mb-4">✅</div>
-              <div class="stat-title text-base mb-3">Graded</div>
+              <div class="stat-title text-base mb-3">Graded Classes</div>
               <div class="stat-value text-5xl tabular-nums">{{ classes.filter(c => c.hasGrade).length }}</div>
             </div>
           </div>
