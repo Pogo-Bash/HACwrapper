@@ -95,7 +95,7 @@ async function login() {
   error.value = ''
 
   try {
-    localStorage.setItem('hacUsername', username.value.trim())
+    localStorage.setItem('hacUsername', username.value)
 
     const nameResponse = await fetch('/api/name', {
       method: 'POST',
@@ -104,9 +104,9 @@ async function login() {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value.trim(),
-        user: username.value.trim(),
-        pass: password.value.trim()
+        link: hacUrl.value,
+        user: username.value,
+        pass: password.value
       })
     })
 
@@ -134,9 +134,9 @@ async function login() {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value.trim(),
-        user: username.value.trim(),
-        pass: password.value.trim()
+        link: hacUrl.value,
+        user: username.value,
+        pass: password.value
       })
     })
 
@@ -192,9 +192,9 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        link: hacUrl.value.trim(),
-        user: username.value.trim(),
-        pass: password.value.trim(),
+        link: hacUrl.value,
+        user: username.value,
+        pass: password.value,
         class: className,
         markingPeriod: markingPeriod
       })
