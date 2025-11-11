@@ -26,9 +26,9 @@ const showStoredLogin = ref(auth.hasStoredCredentials.value);
 
 // Validation
 const isFormValid = computed(() => {
-  return hacUrl.value.trim() !== '' && 
-         username.value.trim() !== '' && 
-         password.value.trim() !== '';
+  return hacUrl.value.trim() !== '' &&
+         username.value.trim() !== '' &&
+         password.value !== ''; // Don't trim password - spaces may be intentional
 });
 
 const isMasterPasswordRequired = computed(() => {
@@ -51,9 +51,9 @@ const handleLogin = async () => {
 
   try {
     const credentials: HACCredentials = {
-      hacUrl: hacUrl.value.trim(),
-      username: username.value.trim(),
-      password: password.value.trim(),
+      hacUrl: hacUrl.value.trim(), // Trim URL to remove accidental whitespace
+      username: username.value.trim(), // Trim username (usually no intentional spaces)
+      password: password.value, // DON'T trim - password spaces may be intentional!
     };
 
     // Validate credentials with HAC API
