@@ -56,6 +56,7 @@ const isLoggedIn = ref(false)
 const showClassModal = ref(false)
 const selectedMarkingPeriod = ref(1)
 const originalClassName = ref('')
+const displayClassName = ref('')
 const darkMode = ref(false)
 const assignmentSortBy = ref<'date' | 'grade-low' | 'grade-high' | 'alpha'>('date')
 const editMode = ref(false)
@@ -183,12 +184,14 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
 
   if (!showClassModal.value || !originalClassName.value) {
     originalClassName.value = className
+    displayClassName.value = className
   }
 
   if (markingPeriod !== 1 && originalClassName.value) {
     className = originalClassName.value
   } else {
     originalClassName.value = className
+    displayClassName.value = className
   }
 
   try {
@@ -243,6 +246,7 @@ function closeClassModal() {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
   originalClassName.value = ''
+  displayClassName.value = ''
 
   // Reset edit mode when closing modal
   editMode.value = false
@@ -639,7 +643,7 @@ const calculatedAverage = computed(() => {
         <!-- Modal Header -->
         <div class="flex justify-between items-start mb-6 md:mb-8 sticky top-0 bg-base-100 z-10 pb-4 -mt-4 pt-4">
           <div class="flex-1 min-w-0 mr-2">
-            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{{ displayClassName }}</h3>
             <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-sm md:text-base text-base-content/60 truncate">
               {{ selectedClassDetails.teacher }}
             </p>
