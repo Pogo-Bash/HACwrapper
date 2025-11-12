@@ -791,42 +791,42 @@ const calculatedAverage = computed(() => {
 
     <!-- Settings Modal -->
     <div v-if="showSettingsModal" class="modal modal-open">
-      <div class="modal-box max-w-2xl">
-        <div class="flex justify-between items-center mb-6">
+      <div class="modal-box max-w-3xl">
+        <div class="flex justify-between items-center mb-8">
           <h3 class="text-2xl font-bold">Theme Settings</h3>
           <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
-        <p class="text-base-content/60 mb-6">Choose from 8 beautiful pastel themes</p>
+        <p class="text-base-content/60 mb-8">Choose from 8 beautiful dark pastel themes</p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <button
             v-for="theme in themes"
             :key="theme.name"
             @click="changeTheme(theme.name); showSettingsModal = false"
             :class="[
-              'card bg-base-100 border-2 p-4 text-left transition-all hover:shadow-lg',
-              currentThemeName === theme.name ? 'border-primary shadow-lg' : 'border-base-300'
+              'card bg-base-100 border-2 p-5 text-left transition-all hover:shadow-lg',
+              currentThemeName === theme.name ? 'border-primary shadow-lg ring-2 ring-primary ring-opacity-50' : 'border-base-300'
             ]"
           >
-            <div class="flex items-start gap-3">
-              <div class="flex-shrink-0 w-12 h-12 rounded-lg" :style="{ background: theme.colors.primary }"></div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-14 h-14 rounded-xl shadow-md" :style="{ background: theme.colors.primary }"></div>
               <div class="flex-1 min-w-0">
-                <h4 class="font-semibold text-base mb-1">{{ theme.name }}</h4>
-                <p class="text-xs text-base-content/60 line-clamp-2">{{ theme.description }}</p>
-                <div class="flex gap-1 mt-2">
-                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeA }"></div>
-                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeB }"></div>
-                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeC }"></div>
-                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeD }"></div>
-                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeF }"></div>
+                <h4 class="font-semibold text-lg mb-2">{{ theme.name }}</h4>
+                <p class="text-xs text-base-content/60 line-clamp-2 mb-3">{{ theme.description }}</p>
+                <div class="flex gap-1.5">
+                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeA }"></div>
+                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeB }"></div>
+                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeC }"></div>
+                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeD }"></div>
+                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeF }"></div>
                 </div>
               </div>
               <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
             </div>
