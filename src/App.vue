@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { themes, getTheme, applyTheme as applyThemeColors, getSavedTheme, saveTheme, type ThemeColors } from './themes'
+import Logo from './components/Logo.vue'
 
 interface Class {
   classId: string
@@ -459,7 +460,9 @@ const calculatedAverage = computed(() => {
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body p-8 md:p-10">
             <div class="text-center mb-8">
-              <div class="text-7xl mb-6">🎓</div>
+              <div class="flex justify-center mb-6">
+                <Logo :width="112" :height="112" :animated="true" />
+              </div>
               <h2 class="text-3xl font-bold tracking-tight mb-3">Login to HAC</h2>
               <p class="text-base text-base-content/60">Enter your credentials to view grades</p>
             </div>

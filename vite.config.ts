@@ -26,13 +26,13 @@ export default defineConfig({
     // PWA for caching
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['vite.svg'],
+      includeAssets: ['logo.svg'],
       manifest: {
         name: 'HAC Wrapper - Grade Viewer',
         short_name: 'HAC Wrapper',
         description: 'Secure HAC grade viewer with encrypted requests and grade scenario planning',
-        theme_color: '#2563eb',
-        background_color: '#ffffff',
+        theme_color: '#0078D4',
+        background_color: '#051a30',
         display: 'standalone',
         orientation: 'any',
         scope: '/',
@@ -40,7 +40,7 @@ export default defineConfig({
         categories: ['education', 'utilities'],
         icons: [
           {
-            src: '/vite.svg',
+            src: '/logo.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable'
