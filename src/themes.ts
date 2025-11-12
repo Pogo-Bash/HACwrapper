@@ -1,6 +1,6 @@
 /**
  * HAC Wrapper Theme Configuration
- * 8 Beautiful Pastel Themes
+ * 8 Beautiful Dark Pastel Themes
  */
 
 export interface ThemeColors {
@@ -57,20 +57,20 @@ export const themes: ThemeColors[] = [
     name: "Lavender Dreams",
     description: "Soft purples and pinks for a dreamy, calming experience",
     colors: {
-      background: "#f5f3ff",
-      surface: "#ffffff",
-      surfaceHover: "#faf8ff",
+      background: "#1a1625",
+      surface: "#251e35",
+      surfaceHover: "#2d2540",
 
       primary: "#a78bfa",
       primaryHover: "#9333ea",
       primaryContent: "#ffffff",
 
-      textPrimary: "#4c1d95",
-      textSecondary: "#6b21a8",
+      textPrimary: "#e9d5ff",
+      textSecondary: "#c4b5fd",
       textMuted: "#a78bfa",
 
-      border: "#e9d5ff",
-      borderHover: "#d8b4fe",
+      border: "#3d2f52",
+      borderHover: "#4c3968",
 
       gradeA: "#86efac",
       gradeB: "#7dd3fc",
@@ -83,14 +83,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#a5b4fc",
 
-      inputBg: "#ffffff",
-      inputBorder: "#e9d5ff",
+      inputBg: "#2d2540",
+      inputBorder: "#4c3968",
       inputFocus: "#a78bfa",
 
-      tabInactive: "#f3e8ff",
+      tabInactive: "#2d2540",
       tabActive: "#a78bfa",
-      progressBar: "#e9d5ff",
-      modalBackdrop: "rgba(167, 139, 250, 0.2)",
+      progressBar: "#3d2f52",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -98,20 +98,20 @@ export const themes: ThemeColors[] = [
     name: "Mint Breeze",
     description: "Fresh minty greens with turquoise accents for clarity",
     colors: {
-      background: "#f0fdf4",
-      surface: "#ffffff",
-      surfaceHover: "#f7fef9",
+      background: "#0f1f17",
+      surface: "#1a2e23",
+      surfaceHover: "#1f3628",
 
       primary: "#6ee7b7",
       primaryHover: "#10b981",
-      primaryContent: "#064e3b",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#064e3b",
-      textSecondary: "#047857",
+      textPrimary: "#d1fae5",
+      textSecondary: "#a7f3d0",
       textMuted: "#6ee7b7",
 
-      border: "#d1fae5",
-      borderHover: "#a7f3d0",
+      border: "#2d4436",
+      borderHover: "#3d5846",
 
       gradeA: "#6ee7b7",
       gradeB: "#67e8f9",
@@ -124,14 +124,14 @@ export const themes: ThemeColors[] = [
       error: "#fecaca",
       info: "#67e8f9",
 
-      inputBg: "#ffffff",
-      inputBorder: "#d1fae5",
+      inputBg: "#1f3628",
+      inputBorder: "#3d5846",
       inputFocus: "#6ee7b7",
 
-      tabInactive: "#d1fae5",
+      tabInactive: "#1f3628",
       tabActive: "#6ee7b7",
-      progressBar: "#d1fae5",
-      modalBackdrop: "rgba(110, 231, 183, 0.2)",
+      progressBar: "#2d4436",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -139,20 +139,20 @@ export const themes: ThemeColors[] = [
     name: "Peach Sunset",
     description: "Warm peachy tones with coral highlights for a cozy feel",
     colors: {
-      background: "#fff7ed",
-      surface: "#ffffff",
-      surfaceHover: "#fffbf5",
+      background: "#1f1410",
+      surface: "#2d1f18",
+      surfaceHover: "#3a2820",
 
       primary: "#fdba74",
       primaryHover: "#f97316",
-      primaryContent: "#7c2d12",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#7c2d12",
-      textSecondary: "#c2410c",
-      textMuted: "#fdba74",
+      textPrimary: "#fed7aa",
+      textSecondary: "#fdba74",
+      textMuted: "#fb923c",
 
-      border: "#fed7aa",
-      borderHover: "#fdba74",
+      border: "#4a3426",
+      borderHover: "#5c4230",
 
       gradeA: "#86efac",
       gradeB: "#93c5fd",
@@ -165,14 +165,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#fdba74",
 
-      inputBg: "#ffffff",
-      inputBorder: "#fed7aa",
+      inputBg: "#3a2820",
+      inputBorder: "#5c4230",
       inputFocus: "#fdba74",
 
-      tabInactive: "#ffedd5",
+      tabInactive: "#3a2820",
       tabActive: "#fdba74",
-      progressBar: "#fed7aa",
-      modalBackdrop: "rgba(253, 186, 116, 0.2)",
+      progressBar: "#4a3426",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -180,20 +180,20 @@ export const themes: ThemeColors[] = [
     name: "Sky Blue",
     description: "Bright sky blues with cloud-white for an airy atmosphere",
     colors: {
-      background: "#f0f9ff",
-      surface: "#ffffff",
-      surfaceHover: "#f7fcff",
+      background: "#0c1621",
+      surface: "#16202d",
+      surfaceHover: "#1d2a3a",
 
       primary: "#7dd3fc",
       primaryHover: "#0ea5e9",
-      primaryContent: "#0c4a6e",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#0c4a6e",
-      textSecondary: "#0369a1",
-      textMuted: "#7dd3fc",
+      textPrimary: "#bae6fd",
+      textSecondary: "#7dd3fc",
+      textMuted: "#38bdf8",
 
-      border: "#bae6fd",
-      borderHover: "#7dd3fc",
+      border: "#243749",
+      borderHover: "#2e4559",
 
       gradeA: "#6ee7b7",
       gradeB: "#7dd3fc",
@@ -206,14 +206,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#7dd3fc",
 
-      inputBg: "#ffffff",
-      inputBorder: "#bae6fd",
+      inputBg: "#1d2a3a",
+      inputBorder: "#2e4559",
       inputFocus: "#7dd3fc",
 
-      tabInactive: "#e0f2fe",
+      tabInactive: "#1d2a3a",
       tabActive: "#7dd3fc",
-      progressBar: "#bae6fd",
-      modalBackdrop: "rgba(125, 211, 252, 0.2)",
+      progressBar: "#243749",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -221,20 +221,20 @@ export const themes: ThemeColors[] = [
     name: "Rose Garden",
     description: "Delicate pink roses with soft blush tones",
     colors: {
-      background: "#fdf2f8",
-      surface: "#ffffff",
-      surfaceHover: "#fef7fb",
+      background: "#1f1019",
+      surface: "#2d1826",
+      surfaceHover: "#3a1f32",
 
       primary: "#f9a8d4",
       primaryHover: "#ec4899",
-      primaryContent: "#831843",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#831843",
-      textSecondary: "#be185d",
-      textMuted: "#f9a8d4",
+      textPrimary: "#fbcfe8",
+      textSecondary: "#f9a8d4",
+      textMuted: "#f472b6",
 
-      border: "#fbcfe8",
-      borderHover: "#f9a8d4",
+      border: "#4a2d3f",
+      borderHover: "#5c3850",
 
       gradeA: "#86efac",
       gradeB: "#a5b4fc",
@@ -247,14 +247,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#f9a8d4",
 
-      inputBg: "#ffffff",
-      inputBorder: "#fbcfe8",
+      inputBg: "#3a1f32",
+      inputBorder: "#5c3850",
       inputFocus: "#f9a8d4",
 
-      tabInactive: "#fce7f3",
+      tabInactive: "#3a1f32",
       tabActive: "#f9a8d4",
-      progressBar: "#fbcfe8",
-      modalBackdrop: "rgba(249, 168, 212, 0.2)",
+      progressBar: "#4a2d3f",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -262,20 +262,20 @@ export const themes: ThemeColors[] = [
     name: "Lemon Zest",
     description: "Bright lemon yellows with cream undertones for energy",
     colors: {
-      background: "#fefce8",
-      surface: "#ffffff",
-      surfaceHover: "#fffef5",
+      background: "#1a1810",
+      surface: "#2a2418",
+      surfaceHover: "#352e20",
 
       primary: "#fde047",
       primaryHover: "#eab308",
-      primaryContent: "#713f12",
+      primaryContent: "#1a1810",
 
-      textPrimary: "#713f12",
-      textSecondary: "#a16207",
-      textMuted: "#fde047",
+      textPrimary: "#fef08a",
+      textSecondary: "#fde047",
+      textMuted: "#facc15",
 
-      border: "#fef08a",
-      borderHover: "#fde047",
+      border: "#443a26",
+      borderHover: "#554830",
 
       gradeA: "#86efac",
       gradeB: "#7dd3fc",
@@ -288,14 +288,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#7dd3fc",
 
-      inputBg: "#ffffff",
-      inputBorder: "#fef08a",
+      inputBg: "#352e20",
+      inputBorder: "#554830",
       inputFocus: "#fde047",
 
-      tabInactive: "#fef9c3",
+      tabInactive: "#352e20",
       tabActive: "#fde047",
-      progressBar: "#fef08a",
-      modalBackdrop: "rgba(253, 224, 71, 0.2)",
+      progressBar: "#443a26",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -303,20 +303,20 @@ export const themes: ThemeColors[] = [
     name: "Ocean Mist",
     description: "Teal and aqua waves with seafoam for tranquility",
     colors: {
-      background: "#f0fdfa",
-      surface: "#ffffff",
-      surfaceHover: "#f7fefb",
+      background: "#0c1f1c",
+      surface: "#16302a",
+      surfaceHover: "#1d3d35",
 
       primary: "#5eead4",
       primaryHover: "#14b8a6",
-      primaryContent: "#134e4a",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#134e4a",
-      textSecondary: "#0f766e",
-      textMuted: "#5eead4",
+      textPrimary: "#99f6e4",
+      textSecondary: "#5eead4",
+      textMuted: "#2dd4bf",
 
-      border: "#99f6e4",
-      borderHover: "#5eead4",
+      border: "#24453d",
+      borderHover: "#2e564c",
 
       gradeA: "#6ee7b7",
       gradeB: "#67e8f9",
@@ -326,17 +326,17 @@ export const themes: ThemeColors[] = [
 
       success: "#6ee7b7",
       warning: "#fef08a",
-      error: "#fca5a5",
+      error: "#fecaca",
       info: "#67e8f9",
 
-      inputBg: "#ffffff",
-      inputBorder: "#99f6e4",
+      inputBg: "#1d3d35",
+      inputBorder: "#2e564c",
       inputFocus: "#5eead4",
 
-      tabInactive: "#ccfbf1",
+      tabInactive: "#1d3d35",
       tabActive: "#5eead4",
-      progressBar: "#99f6e4",
-      modalBackdrop: "rgba(94, 234, 212, 0.2)",
+      progressBar: "#24453d",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 
@@ -344,20 +344,20 @@ export const themes: ThemeColors[] = [
     name: "Periwinkle Night",
     description: "Deep periwinkle blues with indigo shadows for focus",
     colors: {
-      background: "#eef2ff",
-      surface: "#ffffff",
-      surfaceHover: "#f5f7ff",
+      background: "#141626",
+      surface: "#1e2238",
+      surfaceHover: "#252b45",
 
       primary: "#a5b4fc",
       primaryHover: "#6366f1",
-      primaryContent: "#312e81",
+      primaryContent: "#ffffff",
 
-      textPrimary: "#312e81",
-      textSecondary: "#4338ca",
-      textMuted: "#a5b4fc",
+      textPrimary: "#c7d2fe",
+      textSecondary: "#a5b4fc",
+      textMuted: "#818cf8",
 
-      border: "#c7d2fe",
-      borderHover: "#a5b4fc",
+      border: "#2d3451",
+      borderHover: "#3a4265",
 
       gradeA: "#86efac",
       gradeB: "#7dd3fc",
@@ -370,14 +370,14 @@ export const themes: ThemeColors[] = [
       error: "#fca5a5",
       info: "#a5b4fc",
 
-      inputBg: "#ffffff",
-      inputBorder: "#c7d2fe",
+      inputBg: "#252b45",
+      inputBorder: "#3a4265",
       inputFocus: "#a5b4fc",
 
-      tabInactive: "#e0e7ff",
+      tabInactive: "#252b45",
       tabActive: "#a5b4fc",
-      progressBar: "#c7d2fe",
-      modalBackdrop: "rgba(165, 180, 252, 0.2)",
+      progressBar: "#2d3451",
+      modalBackdrop: "rgba(0, 0, 0, 0.7)",
     }
   },
 ];
