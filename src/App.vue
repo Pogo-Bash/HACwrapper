@@ -338,8 +338,11 @@ function toggleEditMode() {
   editMode.value = !editMode.value
 
   if (editMode.value) {
-    // Entering edit mode - create a deep copy of assignments
-    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value?.assignments || []))
+    // Entering edit mode - create a deep copy of assignments with unique IDs
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value?.assignments || [])).map((a: Assignment, idx: number) => ({
+      ...a,
+      _id: idx // Add unique ID for tracking
+    }))
     originalAverage.value = selectedClassDetails.value?.average || '0'
   } else {
     // Exiting edit mode - clear edited data
@@ -349,27 +352,26 @@ function toggleEditMode() {
 
 function resetEditedGrades() {
   if (selectedClassDetails.value?.assignments) {
-    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value.assignments))
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value.assignments)).map((a: Assignment, idx: number) => ({
+      ...a,
+      _id: idx
+    }))
     originalAverage.value = selectedClassDetails.value.average || '0'
   }
 }
 
-function updateAssignmentGrade(assignment: Assignment, field: 'score' | 'totalPoints', value: string) {
-  // Find the assignment in the editedAssignments array
-  const index = editedAssignments.value.findIndex(a =>
-    a.name === assignment.name &&
-    a.dateAssigned === assignment.dateAssigned &&
-    a.category === assignment.category
-  )
+function updateAssignmentGrade(assignmentId: number, field: 'score' | 'totalPoints', value: string) {
+  // Find the assignment in the editedAssignments array by ID
+  const assignment = editedAssignments.value.find((a: any) => a._id === assignmentId)
 
-  if (index !== -1) {
-    editedAssignments.value[index][field] = value
+  if (assignment) {
+    assignment[field] = value
 
     // Recalculate percentage for this assignment
-    const score = parseFloat(editedAssignments.value[index].score) || 0
-    const total = parseFloat(editedAssignments.value[index].totalPoints) || 1
+    const score = parseFloat(assignment.score) || 0
+    const total = parseFloat(assignment.totalPoints) || 1
     const percentage = total > 0 ? ((score / total) * 100).toFixed(2) : '0.00'
-    editedAssignments.value[index].percentage = percentage
+    assignment.percentage = percentage
   }
 }
 
@@ -746,7 +748,7 @@ const calculatedAverage = computed(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(assignment, idx) in sortedAssignments" :key="idx">
+                  <tr v-for="(assignment, idx) in sortedAssignments" :key="editMode ? (assignment as any)._id : idx">
                     <td class="py-5 text-sm">{{ assignment.dateDue }}</td>
                     <td class="py-5 font-medium">{{ assignment.name }}</td>
                     <td class="py-5 text-sm">{{ assignment.category }}</td>
@@ -756,7 +758,7 @@ const calculatedAverage = computed(() => {
                         type="number"
                         step="0.01"
                         :value="assignment.score"
-                        @input="updateAssignmentGrade(assignment, 'score', ($event.target as HTMLInputElement).value)"
+                        @input="updateAssignmentGrade((assignment as any)._id, 'score', ($event.target as HTMLInputElement).value)"
                         class="input input-bordered input-sm w-20 text-center"
                       />
                       <span v-else>{{ assignment.score }}</span>
@@ -767,7 +769,7 @@ const calculatedAverage = computed(() => {
                         type="number"
                         step="0.01"
                         :value="assignment.totalPoints"
-                        @input="updateAssignmentGrade(assignment, 'totalPoints', ($event.target as HTMLInputElement).value)"
+                        @input="updateAssignmentGrade((assignment as any)._id, 'totalPoints', ($event.target as HTMLInputElement).value)"
                         class="input input-bordered input-sm w-20 text-center"
                       />
                       <span v-else>{{ assignment.totalPoints }}</span>
