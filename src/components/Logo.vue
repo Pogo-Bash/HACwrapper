@@ -1,16 +1,5 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" :width="width" :height="height" :class="className">
-    <!-- Background Gradient -->
-    <defs>
-      <linearGradient :id="gradientId" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#000000;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#051a30;stop-opacity:1" />
-      </linearGradient>
-    </defs>
-
-    <!-- Background -->
-    <rect width="400" height="400" :fill="`url(#${gradientId})`" />
-
     <!-- Main container - rotated 45 degrees counterclockwise -->
     <g transform="translate(200, 200) rotate(-45)">
       <!-- Bottom Layer (Lightest Blue) -->
@@ -53,8 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
 interface Props {
   width?: string | number
   height?: string | number
@@ -70,7 +57,4 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const viewBox = '0 0 400 400'
-
-// Generate a unique ID for the gradient to avoid conflicts if multiple logos are on the page
-const gradientId = computed(() => `bgGradient-${Math.random().toString(36).substr(2, 9)}`)
 </script>
