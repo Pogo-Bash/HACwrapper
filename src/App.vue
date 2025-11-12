@@ -791,46 +791,53 @@ const calculatedAverage = computed(() => {
 
     <!-- Settings Modal -->
     <div v-if="showSettingsModal" class="modal modal-open">
-      <div class="modal-box max-w-3xl">
-        <div class="flex justify-between items-center mb-8">
-          <h3 class="text-2xl font-bold">Theme Settings</h3>
-          <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+      <div class="modal-box max-w-4xl max-h-[85vh] p-0 overflow-hidden">
+        <!-- Fixed Header -->
+        <div class="sticky top-0 bg-base-100 z-10 px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-base-300">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="text-2xl sm:text-3xl font-bold mb-2">Theme Settings</h3>
+              <p class="text-sm sm:text-base text-base-content/60">Choose from 8 beautiful dark pastel themes</p>
+            </div>
+            <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle btn-sm sm:btn-md flex-shrink-0 ml-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         </div>
 
-        <p class="text-base-content/60 mb-8">Choose from 8 beautiful dark pastel themes</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <button
-            v-for="theme in themes"
-            :key="theme.name"
-            @click="changeTheme(theme.name); showSettingsModal = false"
-            :class="[
-              'card bg-base-100 border-2 p-5 text-left transition-all hover:shadow-lg',
-              currentThemeName === theme.name ? 'border-primary shadow-lg ring-2 ring-primary ring-opacity-50' : 'border-base-300'
-            ]"
-          >
-            <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-14 h-14 rounded-xl shadow-md" :style="{ background: theme.colors.primary }"></div>
-              <div class="flex-1 min-w-0">
-                <h4 class="font-semibold text-lg mb-2">{{ theme.name }}</h4>
-                <p class="text-xs text-base-content/60 line-clamp-2 mb-3">{{ theme.description }}</p>
-                <div class="flex gap-1.5">
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeA }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeB }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeC }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeD }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeF }"></div>
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto max-h-[calc(85vh-140px)] px-6 sm:px-8 py-6 sm:py-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            <button
+              v-for="theme in themes"
+              :key="theme.name"
+              @click="changeTheme(theme.name); showSettingsModal = false"
+              :class="[
+                'card bg-base-100 border-2 p-5 sm:p-6 text-left transition-all hover:shadow-xl hover:scale-[1.02]',
+                currentThemeName === theme.name ? 'border-primary shadow-xl ring-2 ring-primary ring-opacity-50' : 'border-base-300 hover:border-base-content/20'
+              ]"
+            >
+              <div class="flex items-start gap-4 sm:gap-5">
+                <div class="flex-shrink-0 w-16 h-16 sm:w-18 sm:h-18 rounded-xl shadow-lg" :style="{ background: theme.colors.primary }"></div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-semibold text-lg sm:text-xl mb-2">{{ theme.name }}</h4>
+                  <p class="text-xs sm:text-sm text-base-content/60 line-clamp-2 mb-4 leading-relaxed">{{ theme.description }}</p>
+                  <div class="flex gap-2">
+                    <div class="w-6 h-6 rounded-full shadow-sm" :style="{ background: theme.colors.gradeA }" title="A"></div>
+                    <div class="w-6 h-6 rounded-full shadow-sm" :style="{ background: theme.colors.gradeB }" title="B"></div>
+                    <div class="w-6 h-6 rounded-full shadow-sm" :style="{ background: theme.colors.gradeC }" title="C"></div>
+                    <div class="w-6 h-6 rounded-full shadow-sm" :style="{ background: theme.colors.gradeD }" title="D"></div>
+                    <div class="w-6 h-6 rounded-full shadow-sm" :style="{ background: theme.colors.gradeF }" title="F"></div>
+                  </div>
+                </div>
+                <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 sm:h-8 sm:w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
               </div>
-              <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
-          </button>
+            </button>
+          </div>
         </div>
       </div>
       <form method="dialog" class="modal-backdrop" @click="showSettingsModal = false">
