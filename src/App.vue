@@ -177,6 +177,10 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = markingPeriod
 
+  // Reset edit mode when switching classes
+  editMode.value = false
+  editedAssignments.value = []
+
   if (!showClassModal.value || !originalClassName.value) {
     originalClassName.value = className
   }
@@ -239,6 +243,10 @@ function closeClassModal() {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
   originalClassName.value = ''
+
+  // Reset edit mode when closing modal
+  editMode.value = false
+  editedAssignments.value = []
 }
 
 function logout() {
@@ -627,30 +635,30 @@ const calculatedAverage = computed(() => {
 
     <!-- Class Details Modal -->
     <div v-if="showClassModal" class="modal modal-open">
-      <div class="modal-box max-w-6xl p-8 md:p-10">
+      <div class="modal-box w-full h-full max-h-full md:max-w-6xl md:h-auto md:max-h-[90vh] p-4 sm:p-6 md:p-8 lg:p-10 m-0 md:m-4 rounded-none md:rounded-2xl overflow-y-auto">
         <!-- Modal Header -->
-        <div class="flex justify-between items-start mb-8">
-          <div>
-            <h3 class="text-3xl font-bold mb-2">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
-            <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-base text-base-content/60">
+        <div class="flex justify-between items-start mb-6 md:mb-8 sticky top-0 bg-base-100 z-10 pb-4 -mt-4 pt-4">
+          <div class="flex-1 min-w-0 mr-2">
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
+            <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-sm md:text-base text-base-content/60 truncate">
               {{ selectedClassDetails.teacher }}
             </p>
           </div>
-          <button @click="closeClassModal" class="btn btn-ghost btn-circle btn-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          <button @click="closeClassModal" class="btn btn-ghost btn-circle btn-sm md:btn-lg flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
         <!-- Quarter Tabs -->
-        <div class="tabs tabs-boxed mb-8 p-2">
+        <div class="tabs tabs-boxed mb-6 md:mb-8 p-1 md:p-2 grid grid-cols-4 gap-1">
           <button
             v-for="mp in [1, 2, 3, 4]"
             :key="mp"
             @click="changeMarkingPeriod(mp)"
             :class="[
-              'tab tab-lg px-6 py-3 transition-all',
+              'tab text-sm md:text-base md:tab-lg px-2 sm:px-4 md:px-6 py-2 md:py-3 transition-all touch-manipulation',
               selectedMarkingPeriod === mp
-                ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg scale-105'
+                ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg md:scale-105'
                 : 'hover:bg-base-300'
             ]"
             :disabled="loadingDetails"
@@ -666,32 +674,32 @@ const calculatedAverage = computed(() => {
         </div>
 
         <!-- Class Details Content -->
-        <div v-else-if="selectedClassDetails" class="space-y-8">
+        <div v-else-if="selectedClassDetails" class="space-y-6 md:space-y-8">
           <!-- Average Card -->
           <div class="stats shadow-lg bg-primary w-full">
-            <div class="stat p-8">
-              <div class="stat-title text-primary-content/80 text-base mb-2">
+            <div class="stat p-4 sm:p-6 md:p-8">
+              <div class="stat-title text-primary-content/80 text-sm md:text-base mb-2">
                 Quarter {{ selectedMarkingPeriod }} Average
               </div>
-              <div class="stat-value text-primary-content text-6xl tabular-nums mb-2">
+              <div class="stat-value text-primary-content text-4xl sm:text-5xl md:text-6xl tabular-nums mb-2">
                 {{ selectedClassDetails.average }}
               </div>
-              <div v-if="editMode && calculatedAverage !== selectedClassDetails.average" class="mt-4">
-                <div class="text-primary-content/80 text-sm mb-1">What-If Scenario:</div>
-                <div class="flex items-center gap-3">
-                  <span class="text-3xl font-bold text-primary-content/60 line-through tabular-nums">
+              <div v-if="editMode && calculatedAverage !== selectedClassDetails.average" class="mt-3 md:mt-4">
+                <div class="text-primary-content/80 text-xs md:text-sm mb-1">What-If Scenario:</div>
+                <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                  <span class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-content/60 line-through tabular-nums">
                     {{ originalAverage }}
                   </span>
-                  <span class="text-4xl text-primary-content">→</span>
-                  <span class="text-4xl font-bold text-success tabular-nums">
+                  <span class="text-2xl sm:text-3xl md:text-4xl text-primary-content">→</span>
+                  <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-success tabular-nums">
                     {{ calculatedAverage }}
                   </span>
-                  <span class="badge badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
+                  <span class="badge badge-md md:badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
                     {{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) > '0' ? '+' : '' }}{{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) }}%
                   </span>
                 </div>
               </div>
-              <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60 text-sm mt-2">
+              <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60 text-xs md:text-sm mt-2">
                 Last Updated: {{ selectedClassDetails.lastUpdated }}
               </div>
             </div>
@@ -699,82 +707,88 @@ const calculatedAverage = computed(() => {
 
           <!-- Assignments Table -->
           <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
-            <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-              <h4 class="font-bold text-xl">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
-              <div class="flex gap-3 items-end">
-                <div class="form-control">
-                  <label class="label pb-1">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-3 md:gap-4">
+              <h4 class="font-bold text-lg md:text-xl">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
+              <div class="flex flex-col sm:flex-row gap-2 md:gap-3 w-full sm:w-auto">
+                <div class="form-control w-full sm:w-auto">
+                  <label class="label pb-1 hidden sm:block">
                     <span class="label-text text-sm font-medium">Sort by:</span>
                   </label>
-                  <select v-model="assignmentSortBy" class="select select-bordered select-sm">
-                    <option value="date">Date Assigned (Newest)</option>
-                    <option value="grade-low">Grade (Lowest First)</option>
-                    <option value="grade-high">Grade (Highest First)</option>
-                    <option value="alpha">Alphabetical</option>
+                  <select v-model="assignmentSortBy" class="select select-bordered select-sm w-full sm:w-auto touch-manipulation">
+                    <option value="date">Date (Newest)</option>
+                    <option value="grade-low">Grade (Low→High)</option>
+                    <option value="grade-high">Grade (High→Low)</option>
+                    <option value="alpha">A-Z</option>
                   </select>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 w-full sm:w-auto">
                   <button
                     @click="toggleEditMode"
-                    :class="['btn btn-sm', editMode ? 'btn-success' : 'btn-outline']"
+                    :class="['btn btn-sm flex-1 sm:flex-none touch-manipulation', editMode ? 'btn-success' : 'btn-outline']"
                   >
-                    {{ editMode ? '✓ Edit Mode Active' : '✏️ Edit Mode' }}
+                    <span class="hidden sm:inline">{{ editMode ? '✓ Edit Mode Active' : '✏️ Edit Mode' }}</span>
+                    <span class="sm:hidden">{{ editMode ? '✓ Active' : '✏️ Edit' }}</span>
                   </button>
                   <button
                     v-if="editMode"
                     @click="resetEditedGrades"
-                    class="btn btn-sm btn-ghost"
+                    class="btn btn-sm btn-ghost touch-manipulation"
                     title="Reset to original grades"
                   >
-                    ↺ Reset
+                    ↺ <span class="hidden sm:inline">Reset</span>
                   </button>
                 </div>
               </div>
             </div>
-            <div v-if="editMode" class="alert alert-info mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span class="text-sm">Edit assignment scores to see how they would impact your grade. Changes are temporary and won't be saved.</span>
+            <div v-if="editMode" class="alert alert-info mb-4 py-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="text-xs md:text-sm">Edit scores to see grade impact. Changes are temporary.</span>
             </div>
-            <div class="overflow-x-auto">
-              <table class="table table-zebra">
+            <div class="overflow-x-auto -mx-4 sm:mx-0">
+              <table class="table table-zebra table-sm md:table-md">
                 <thead>
-                  <tr class="text-base">
-                    <th class="py-5">Due Date</th>
-                    <th class="py-5">Assignment</th>
-                    <th class="py-5">Category</th>
-                    <th class="py-5 text-center">Score</th>
-                    <th class="py-5 text-center">Total</th>
-                    <th class="py-5 text-center">%</th>
+                  <tr class="text-xs sm:text-sm md:text-base">
+                    <th class="py-3 md:py-5 hidden sm:table-cell">Due Date</th>
+                    <th class="py-3 md:py-5">Assignment</th>
+                    <th class="py-3 md:py-5 hidden lg:table-cell">Category</th>
+                    <th class="py-3 md:py-5 text-center">Score</th>
+                    <th class="py-3 md:py-5 text-center">Total</th>
+                    <th class="py-3 md:py-5 text-center">%</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(assignment, idx) in sortedAssignments" :key="editMode ? (assignment as any)._id : idx">
-                    <td class="py-5 text-sm">{{ assignment.dateDue }}</td>
-                    <td class="py-5 font-medium">{{ assignment.name }}</td>
-                    <td class="py-5 text-sm">{{ assignment.category }}</td>
-                    <td class="py-5 text-center tabular-nums">
+                    <td class="py-3 md:py-5 text-xs hidden sm:table-cell">{{ assignment.dateDue }}</td>
+                    <td class="py-3 md:py-5 text-xs sm:text-sm font-medium max-w-[120px] sm:max-w-none">
+                      <div class="truncate">{{ assignment.name }}</div>
+                      <div class="text-[10px] sm:hidden text-base-content/60 mt-0.5">{{ assignment.category }}</div>
+                    </td>
+                    <td class="py-3 md:py-5 text-xs hidden lg:table-cell">{{ assignment.category }}</td>
+                    <td class="py-3 md:py-5 text-center tabular-nums">
                       <input
                         v-if="editMode"
                         type="number"
                         step="0.01"
+                        inputmode="decimal"
                         :value="assignment.score"
                         @input="updateAssignmentGrade((assignment as any)._id, 'score', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-sm w-20 text-center"
+                        class="input input-bordered input-xs md:input-sm w-14 md:w-20 text-center touch-manipulation text-xs md:text-sm"
                       />
-                      <span v-else>{{ assignment.score }}</span>
+                      <span v-else class="text-xs md:text-sm">{{ assignment.score }}</span>
                     </td>
-                    <td class="py-5 text-center tabular-nums">
+                    <td class="py-3 md:py-5 text-center tabular-nums">
                       <input
                         v-if="editMode"
                         type="number"
                         step="0.01"
+                        inputmode="decimal"
                         :value="assignment.totalPoints"
                         @input="updateAssignmentGrade((assignment as any)._id, 'totalPoints', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-sm w-20 text-center"
+                        class="input input-bordered input-xs md:input-sm w-14 md:w-20 text-center touch-manipulation text-xs md:text-sm"
                       />
-                      <span v-else>{{ assignment.totalPoints }}</span>
+                      <span v-else class="text-xs md:text-sm">{{ assignment.totalPoints }}</span>
                     </td>
-                    <td class="py-5 text-center font-semibold tabular-nums" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
+                    <td class="py-3 md:py-5 text-center font-semibold tabular-nums text-xs md:text-sm" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
                       {{ assignment.percentage }}
                     </td>
                   </tr>
@@ -788,19 +802,19 @@ const calculatedAverage = computed(() => {
 
           <!-- Categories -->
           <div v-if="selectedClassDetails.categories && selectedClassDetails.categories.length > 0">
-            <h4 class="font-bold text-xl mb-6">Categories</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h4 class="font-bold text-lg md:text-xl mb-4 md:mb-6">Categories</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div
                 v-for="(category, idx) in selectedClassDetails.categories"
                 :key="idx"
                 class="card bg-base-200 shadow-sm"
               >
-                <div class="card-body p-6">
+                <div class="card-body p-4 md:p-6">
                   <div class="flex justify-between items-center mb-2">
-                    <span class="font-semibold text-base">{{ category.name }}</span>
-                    <span class="text-xl font-bold text-primary tabular-nums">{{ category.percentage }}</span>
+                    <span class="font-semibold text-sm md:text-base">{{ category.name }}</span>
+                    <span class="text-lg md:text-xl font-bold text-primary tabular-nums">{{ category.percentage }}</span>
                   </div>
-                  <p class="text-sm text-base-content/60 tabular-nums">
+                  <p class="text-xs md:text-sm text-base-content/60 tabular-nums">
                     {{ category.points }} / {{ category.maxPoints }} points
                   </p>
                 </div>
