@@ -430,7 +430,7 @@ const calculatedAverage = computed(() => {
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-3xl font-bold tracking-tight text-base-content">
-              HAC Wrapper
+              staHAC
             </h1>
             <p class="text-sm text-base-content/60 mt-2">Secure grade access, beautifully designed</p>
           </div>

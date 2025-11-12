@@ -1,5 +1,5 @@
 /**
- * HAC Wrapper Theme Configuration
+ * staHAC Theme Configuration
  * 8 Beautiful Dark Pastel Themes
  */
 

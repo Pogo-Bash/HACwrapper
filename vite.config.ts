@@ -28,9 +28,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.svg'],
       manifest: {
-        name: 'HAC Wrapper - Grade Viewer',
-        short_name: 'HAC Wrapper',
-        description: 'Secure HAC grade viewer with encrypted requests and grade scenario planning',
+        name: 'staHAC - Grade Viewer',
+        short_name: 'staHAC',
+        description: 'Secure grade viewer with encrypted requests and grade scenario planning',
         theme_color: '#0078D4',
         background_color: '#051a30',
         display: 'standalone',
