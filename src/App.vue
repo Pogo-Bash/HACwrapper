@@ -58,6 +58,9 @@ const selectedMarkingPeriod = ref(1)
 const originalClassName = ref('')
 const darkMode = ref(false)
 const assignmentSortBy = ref<'date' | 'grade-low' | 'grade-high' | 'alpha'>('date')
+const editMode = ref(false)
+const editedAssignments = ref<Assignment[]>([])
+const originalAverage = ref<string>('')
 
 onMounted(async () => {
   const savedTheme = localStorage.getItem('theme')
@@ -304,7 +307,7 @@ function calculateWeightedGPA(): string {
 const sortedAssignments = computed(() => {
   if (!selectedClassDetails.value?.assignments) return []
 
-  const assignments = [...selectedClassDetails.value.assignments]
+  const assignments = editMode.value ? [...editedAssignments.value] : [...selectedClassDetails.value.assignments]
 
   switch (assignmentSortBy.value) {
     case 'grade-low':
@@ -329,6 +332,80 @@ const sortedAssignments = computed(() => {
         return dateB - dateA // Most recent first
       })
   }
+})
+
+function toggleEditMode() {
+  editMode.value = !editMode.value
+
+  if (editMode.value) {
+    // Entering edit mode - create a deep copy of assignments
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value?.assignments || []))
+    originalAverage.value = selectedClassDetails.value?.average || '0'
+  } else {
+    // Exiting edit mode - clear edited data
+    editedAssignments.value = []
+  }
+}
+
+function resetEditedGrades() {
+  if (selectedClassDetails.value?.assignments) {
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value.assignments))
+    originalAverage.value = selectedClassDetails.value.average || '0'
+  }
+}
+
+function updateAssignmentGrade(assignment: Assignment, field: 'score' | 'totalPoints', value: string) {
+  // Find the assignment in the editedAssignments array
+  const index = editedAssignments.value.findIndex(a =>
+    a.name === assignment.name &&
+    a.dateAssigned === assignment.dateAssigned &&
+    a.category === assignment.category
+  )
+
+  if (index !== -1) {
+    editedAssignments.value[index][field] = value
+
+    // Recalculate percentage for this assignment
+    const score = parseFloat(editedAssignments.value[index].score) || 0
+    const total = parseFloat(editedAssignments.value[index].totalPoints) || 1
+    const percentage = total > 0 ? ((score / total) * 100).toFixed(2) : '0.00'
+    editedAssignments.value[index].percentage = percentage
+  }
+}
+
+const calculatedAverage = computed(() => {
+  if (!editMode.value || editedAssignments.value.length === 0) {
+    return selectedClassDetails.value?.average || '0'
+  }
+
+  // Group assignments by category
+  const categoriesByName: { [key: string]: { points: number, maxPoints: number, weight: number } } = {}
+
+  editedAssignments.value.forEach(assignment => {
+    const category = assignment.category
+    const score = parseFloat(assignment.score) || 0
+    const total = parseFloat(assignment.totalPoints) || 0
+    const weight = parseFloat(assignment.weight) || 1
+
+    if (!categoriesByName[category]) {
+      categoriesByName[category] = { points: 0, maxPoints: 0, weight: weight }
+    }
+
+    categoriesByName[category].points += score * weight
+    categoriesByName[category].maxPoints += total * weight
+  })
+
+  // Calculate weighted average across categories
+  let totalWeightedPoints = 0
+  let totalMaxPoints = 0
+
+  Object.values(categoriesByName).forEach(cat => {
+    totalWeightedPoints += cat.points
+    totalMaxPoints += cat.maxPoints
+  })
+
+  const average = totalMaxPoints > 0 ? (totalWeightedPoints / totalMaxPoints) * 100 : 0
+  return average.toFixed(2)
 })
 </script>
 
@@ -597,6 +674,21 @@ const sortedAssignments = computed(() => {
               <div class="stat-value text-primary-content text-6xl tabular-nums mb-2">
                 {{ selectedClassDetails.average }}
               </div>
+              <div v-if="editMode && calculatedAverage !== selectedClassDetails.average" class="mt-4">
+                <div class="text-primary-content/80 text-sm mb-1">What-If Scenario:</div>
+                <div class="flex items-center gap-3">
+                  <span class="text-3xl font-bold text-primary-content/60 line-through tabular-nums">
+                    {{ originalAverage }}
+                  </span>
+                  <span class="text-4xl text-primary-content">→</span>
+                  <span class="text-4xl font-bold text-success tabular-nums">
+                    {{ calculatedAverage }}
+                  </span>
+                  <span class="badge badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
+                    {{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) > '0' ? '+' : '' }}{{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) }}%
+                  </span>
+                </div>
+              </div>
               <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60 text-sm mt-2">
                 Last Updated: {{ selectedClassDetails.lastUpdated }}
               </div>
@@ -607,17 +699,39 @@ const sortedAssignments = computed(() => {
           <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
             <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
               <h4 class="font-bold text-xl">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
-              <div class="form-control">
-                <label class="label pb-1">
-                  <span class="label-text text-sm font-medium">Sort by:</span>
-                </label>
-                <select v-model="assignmentSortBy" class="select select-bordered select-sm">
-                  <option value="date">Date Assigned (Newest)</option>
-                  <option value="grade-low">Grade (Lowest First)</option>
-                  <option value="grade-high">Grade (Highest First)</option>
-                  <option value="alpha">Alphabetical</option>
-                </select>
+              <div class="flex gap-3 items-end">
+                <div class="form-control">
+                  <label class="label pb-1">
+                    <span class="label-text text-sm font-medium">Sort by:</span>
+                  </label>
+                  <select v-model="assignmentSortBy" class="select select-bordered select-sm">
+                    <option value="date">Date Assigned (Newest)</option>
+                    <option value="grade-low">Grade (Lowest First)</option>
+                    <option value="grade-high">Grade (Highest First)</option>
+                    <option value="alpha">Alphabetical</option>
+                  </select>
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    @click="toggleEditMode"
+                    :class="['btn btn-sm', editMode ? 'btn-success' : 'btn-outline']"
+                  >
+                    {{ editMode ? '✓ Edit Mode Active' : '✏️ Edit Mode' }}
+                  </button>
+                  <button
+                    v-if="editMode"
+                    @click="resetEditedGrades"
+                    class="btn btn-sm btn-ghost"
+                    title="Reset to original grades"
+                  >
+                    ↺ Reset
+                  </button>
+                </div>
               </div>
+            </div>
+            <div v-if="editMode" class="alert alert-info mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="text-sm">Edit assignment scores to see how they would impact your grade. Changes are temporary and won't be saved.</span>
             </div>
             <div class="overflow-x-auto">
               <table class="table table-zebra">
@@ -636,9 +750,31 @@ const sortedAssignments = computed(() => {
                     <td class="py-5 text-sm">{{ assignment.dateDue }}</td>
                     <td class="py-5 font-medium">{{ assignment.name }}</td>
                     <td class="py-5 text-sm">{{ assignment.category }}</td>
-                    <td class="py-5 text-center tabular-nums">{{ assignment.score }}</td>
-                    <td class="py-5 text-center tabular-nums">{{ assignment.totalPoints }}</td>
-                    <td class="py-5 text-center font-semibold tabular-nums">{{ assignment.percentage }}</td>
+                    <td class="py-5 text-center tabular-nums">
+                      <input
+                        v-if="editMode"
+                        type="number"
+                        step="0.01"
+                        :value="assignment.score"
+                        @input="updateAssignmentGrade(assignment, 'score', ($event.target as HTMLInputElement).value)"
+                        class="input input-bordered input-sm w-20 text-center"
+                      />
+                      <span v-else>{{ assignment.score }}</span>
+                    </td>
+                    <td class="py-5 text-center tabular-nums">
+                      <input
+                        v-if="editMode"
+                        type="number"
+                        step="0.01"
+                        :value="assignment.totalPoints"
+                        @input="updateAssignmentGrade(assignment, 'totalPoints', ($event.target as HTMLInputElement).value)"
+                        class="input input-bordered input-sm w-20 text-center"
+                      />
+                      <span v-else>{{ assignment.totalPoints }}</span>
+                    </td>
+                    <td class="py-5 text-center font-semibold tabular-nums" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
+                      {{ assignment.percentage }}
+                    </td>
                   </tr>
                 </tbody>
               </table>
