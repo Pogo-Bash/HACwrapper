@@ -433,19 +433,19 @@ const calculatedAverage = computed(() => {
             </h1>
             <p class="text-sm text-base-content/60 mt-2">Secure grade access, beautifully designed</p>
           </div>
-          <div class="flex items-center gap-2 sm:gap-4">
+          <div class="flex items-center gap-3 sm:gap-4">
             <button
               @click="showSettingsModal = true"
-              class="btn btn-ghost btn-circle btn-sm sm:btn-md"
+              class="btn btn-ghost btn-circle min-h-[44px] min-w-[44px] sm:btn-md"
               title="Theme Settings"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </button>
 
-            <button v-if="isLoggedIn" @click="logout" class="btn btn-ghost btn-sm px-4 sm:px-6 py-2">
+            <button v-if="isLoggedIn" @click="logout" class="btn btn-ghost min-h-[44px] px-4 sm:px-6 text-sm sm:text-base">
               Logout
             </button>
           </div>
@@ -475,7 +475,7 @@ const calculatedAverage = computed(() => {
                   required
                   inputmode="url"
                   placeholder="https://hac.eths.k12.il.us/"
-                  class="input input-bordered input-lg w-full touch-manipulation"
+                  class="input input-bordered input-lg w-full touch-manipulation min-h-[52px] text-base"
                 />
               </div>
 
@@ -490,7 +490,7 @@ const calculatedAverage = computed(() => {
                   inputmode="text"
                   autocomplete="username"
                   placeholder="Your username"
-                  class="input input-bordered input-lg w-full touch-manipulation"
+                  class="input input-bordered input-lg w-full touch-manipulation min-h-[52px] text-base"
                 />
               </div>
 
@@ -504,14 +504,14 @@ const calculatedAverage = computed(() => {
                   required
                   autocomplete="current-password"
                   placeholder="Your password"
-                  class="input input-bordered input-lg w-full touch-manipulation"
+                  class="input input-bordered input-lg w-full touch-manipulation min-h-[52px] text-base"
                 />
               </div>
 
               <button
                 type="submit"
                 :disabled="loading"
-                class="btn btn-primary w-full font-semibold text-base px-6 py-4 h-auto min-h-[3rem] mt-6"
+                class="btn btn-primary w-full font-semibold text-lg px-6 py-4 h-auto min-h-[56px] mt-6 touch-manipulation"
               >
                 <span v-if="loading" class="loading loading-spinner loading-md"></span>
                 {{ loading ? 'Logging in...' : 'Login' }}
@@ -599,25 +599,25 @@ const calculatedAverage = computed(() => {
       <div class="modal-box w-full h-full max-h-full md:max-w-6xl md:h-auto md:max-h-[90vh] p-4 sm:p-6 md:p-8 lg:p-10 m-0 md:m-4 rounded-none md:rounded-2xl overflow-y-auto">
         <!-- Modal Header -->
         <div class="flex justify-between items-start mb-6 md:mb-8 sticky top-0 bg-base-100 z-10 pb-4 -mt-4 pt-4">
-          <div class="flex-1 min-w-0 mr-2">
+          <div class="flex-1 min-w-0 mr-3">
             <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{{ displayClassName }}</h3>
             <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-sm md:text-base text-base-content/60 truncate">
               {{ selectedClassDetails.teacher }}
             </p>
           </div>
-          <button @click="closeClassModal" class="btn btn-ghost btn-circle btn-sm md:btn-lg flex-shrink-0">
+          <button @click="closeClassModal" class="btn btn-ghost btn-circle min-h-[44px] min-w-[44px] md:btn-lg flex-shrink-0 touch-manipulation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
         <!-- Quarter Tabs -->
-        <div class="tabs tabs-boxed mb-6 md:mb-8 p-1 md:p-2 grid grid-cols-4 gap-1">
+        <div class="tabs tabs-boxed mb-6 md:mb-8 p-1 md:p-2 grid grid-cols-4 gap-1 sm:gap-2">
           <button
             v-for="mp in [1, 2, 3, 4]"
             :key="mp"
             @click="changeMarkingPeriod(mp)"
             :class="[
-              'tab text-sm md:text-base md:tab-lg px-2 sm:px-4 md:px-6 py-2 md:py-3 transition-all touch-manipulation',
+              'tab text-sm sm:text-base md:text-lg md:tab-lg px-3 sm:px-4 md:px-6 py-3 md:py-4 transition-all touch-manipulation min-h-[48px] font-semibold',
               selectedMarkingPeriod === mp
                 ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg md:scale-105'
                 : 'hover:bg-base-300'
@@ -673,9 +673,9 @@ const calculatedAverage = computed(() => {
               <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
                 <div class="form-control flex-1 sm:flex-initial sm:min-w-[200px]">
                   <label class="label pb-2">
-                    <span class="label-text text-sm font-medium">Sort by</span>
+                    <span class="label-text text-sm sm:text-base font-medium">Sort by</span>
                   </label>
-                  <select v-model="assignmentSortBy" class="select select-bordered w-full touch-manipulation">
+                  <select v-model="assignmentSortBy" class="select select-bordered select-md w-full touch-manipulation min-h-[48px] text-base">
                     <option value="date">Date (Newest)</option>
                     <option value="grade-low">Grade (Low→High)</option>
                     <option value="grade-high">Grade (High→Low)</option>
@@ -685,7 +685,7 @@ const calculatedAverage = computed(() => {
                 <div class="flex gap-3 flex-1 sm:flex-initial">
                   <button
                     @click="toggleEditMode"
-                    :class="['btn flex-1 sm:flex-initial touch-manipulation', editMode ? 'btn-success' : 'btn-outline']"
+                    :class="['btn btn-md flex-1 sm:flex-initial touch-manipulation min-h-[48px] text-base font-medium', editMode ? 'btn-success' : 'btn-outline']"
                   >
                     <span class="hidden sm:inline">{{ editMode ? '✓ Edit Mode Active' : '✏️ Edit Mode' }}</span>
                     <span class="sm:hidden">{{ editMode ? '✓ Active' : '✏️ Edit' }}</span>
@@ -693,39 +693,39 @@ const calculatedAverage = computed(() => {
                   <button
                     v-if="editMode"
                     @click="resetEditedGrades"
-                    class="btn btn-ghost touch-manipulation"
+                    class="btn btn-ghost btn-md touch-manipulation min-h-[48px] text-base"
                     title="Reset to original grades"
                   >
-                    ↺ <span class="hidden sm:inline">Reset</span>
+                    <span class="text-xl mr-1">↺</span> <span class="hidden sm:inline">Reset</span>
                   </button>
                 </div>
               </div>
             </div>
-            <div v-if="editMode" class="alert alert-info mb-4 py-3">
+            <div v-if="editMode" class="alert alert-info mb-4 py-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span class="text-xs md:text-sm">Edit scores to see grade impact. Changes are temporary.</span>
+              <span class="text-sm md:text-base">Edit scores to see grade impact. Changes are temporary.</span>
             </div>
             <div class="overflow-x-auto -mx-4 sm:mx-0">
-              <table class="table table-zebra table-sm md:table-md">
+              <table class="table table-zebra table-md md:table-lg">
                 <thead>
-                  <tr class="text-xs sm:text-sm md:text-base">
-                    <th class="py-3 md:py-5 hidden sm:table-cell">Due Date</th>
-                    <th class="py-3 md:py-5">Assignment</th>
-                    <th class="py-3 md:py-5 hidden lg:table-cell">Category</th>
-                    <th class="py-3 md:py-5 text-center">Score</th>
-                    <th class="py-3 md:py-5 text-center">Total</th>
-                    <th class="py-3 md:py-5 text-center">%</th>
+                  <tr class="text-sm sm:text-base md:text-lg">
+                    <th class="py-4 md:py-5 hidden sm:table-cell">Due Date</th>
+                    <th class="py-4 md:py-5">Assignment</th>
+                    <th class="py-4 md:py-5 hidden lg:table-cell">Category</th>
+                    <th class="py-4 md:py-5 text-center">Score</th>
+                    <th class="py-4 md:py-5 text-center">Total</th>
+                    <th class="py-4 md:py-5 text-center">%</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(assignment, idx) in sortedAssignments" :key="editMode ? (assignment as any)._id : idx">
-                    <td class="py-3 md:py-5 text-xs hidden sm:table-cell">{{ assignment.dateDue }}</td>
-                    <td class="py-3 md:py-5 text-xs sm:text-sm font-medium max-w-[120px] sm:max-w-none">
+                    <td class="py-4 md:py-5 text-sm hidden sm:table-cell">{{ assignment.dateDue }}</td>
+                    <td class="py-4 md:py-5 text-sm sm:text-base font-medium max-w-[140px] sm:max-w-none">
                       <div class="truncate">{{ assignment.name }}</div>
-                      <div class="text-[10px] sm:hidden text-base-content/60 mt-0.5">{{ assignment.category }}</div>
+                      <div class="text-xs sm:hidden text-base-content/60 mt-1">{{ assignment.category }}</div>
                     </td>
-                    <td class="py-3 md:py-5 text-xs hidden lg:table-cell">{{ assignment.category }}</td>
-                    <td class="py-3 md:py-5 text-center tabular-nums">
+                    <td class="py-4 md:py-5 text-sm hidden lg:table-cell">{{ assignment.category }}</td>
+                    <td class="py-4 md:py-5 text-center tabular-nums">
                       <input
                         v-if="editMode"
                         type="number"
@@ -733,11 +733,11 @@ const calculatedAverage = computed(() => {
                         inputmode="decimal"
                         :value="assignment.score"
                         @input="updateAssignmentGrade((assignment as any)._id, 'score', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-xs md:input-sm w-14 md:w-20 text-center touch-manipulation text-xs md:text-sm"
+                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px]"
                       />
-                      <span v-else class="text-xs md:text-sm">{{ assignment.score }}</span>
+                      <span v-else class="text-sm md:text-base">{{ assignment.score }}</span>
                     </td>
-                    <td class="py-3 md:py-5 text-center tabular-nums">
+                    <td class="py-4 md:py-5 text-center tabular-nums">
                       <input
                         v-if="editMode"
                         type="number"
@@ -745,11 +745,11 @@ const calculatedAverage = computed(() => {
                         inputmode="decimal"
                         :value="assignment.totalPoints"
                         @input="updateAssignmentGrade((assignment as any)._id, 'totalPoints', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-xs md:input-sm w-14 md:w-20 text-center touch-manipulation text-xs md:text-sm"
+                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px]"
                       />
-                      <span v-else class="text-xs md:text-sm">{{ assignment.totalPoints }}</span>
+                      <span v-else class="text-sm md:text-base">{{ assignment.totalPoints }}</span>
                     </td>
-                    <td class="py-3 md:py-5 text-center font-semibold tabular-nums text-xs md:text-sm" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
+                    <td class="py-4 md:py-5 text-center font-semibold tabular-nums text-sm md:text-base" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
                       {{ assignment.percentage }}
                     </td>
                   </tr>
@@ -791,46 +791,53 @@ const calculatedAverage = computed(() => {
 
     <!-- Settings Modal -->
     <div v-if="showSettingsModal" class="modal modal-open">
-      <div class="modal-box max-w-3xl">
-        <div class="flex justify-between items-center mb-8">
-          <h3 class="text-2xl font-bold">Theme Settings</h3>
-          <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+      <div class="modal-box max-w-4xl max-h-[85vh] p-0 overflow-hidden">
+        <!-- Fixed Header -->
+        <div class="sticky top-0 bg-base-100 z-10 px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-base-300">
+          <div class="flex justify-between items-start mb-3">
+            <div class="flex-1 mr-3">
+              <h3 class="text-2xl sm:text-3xl font-bold mb-2">Theme Settings</h3>
+              <p class="text-sm sm:text-base text-base-content/60">Choose from 8 beautiful dark pastel themes</p>
+            </div>
+            <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle min-h-[44px] min-w-[44px] sm:btn-md flex-shrink-0 touch-manipulation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         </div>
 
-        <p class="text-base-content/60 mb-8">Choose from 8 beautiful dark pastel themes</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <button
-            v-for="theme in themes"
-            :key="theme.name"
-            @click="changeTheme(theme.name); showSettingsModal = false"
-            :class="[
-              'card bg-base-100 border-2 p-5 text-left transition-all hover:shadow-lg',
-              currentThemeName === theme.name ? 'border-primary shadow-lg ring-2 ring-primary ring-opacity-50' : 'border-base-300'
-            ]"
-          >
-            <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-14 h-14 rounded-xl shadow-md" :style="{ background: theme.colors.primary }"></div>
-              <div class="flex-1 min-w-0">
-                <h4 class="font-semibold text-lg mb-2">{{ theme.name }}</h4>
-                <p class="text-xs text-base-content/60 line-clamp-2 mb-3">{{ theme.description }}</p>
-                <div class="flex gap-1.5">
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeA }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeB }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeC }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeD }"></div>
-                  <div class="w-5 h-5 rounded-full shadow-sm" :style="{ background: theme.colors.gradeF }"></div>
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto max-h-[calc(85vh-140px)] px-6 sm:px-8 py-6 sm:py-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            <button
+              v-for="theme in themes"
+              :key="theme.name"
+              @click="changeTheme(theme.name); showSettingsModal = false"
+              :class="[
+                'card bg-base-100 border-2 p-6 sm:p-7 text-left transition-all hover:shadow-xl hover:scale-[1.02] touch-manipulation min-h-[120px]',
+                currentThemeName === theme.name ? 'border-primary shadow-xl ring-2 ring-primary ring-opacity-50' : 'border-base-300 hover:border-base-content/20'
+              ]"
+            >
+              <div class="flex items-start gap-4 sm:gap-5">
+                <div class="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl shadow-lg" :style="{ background: theme.colors.primary }"></div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-semibold text-base sm:text-lg md:text-xl mb-2">{{ theme.name }}</h4>
+                  <p class="text-xs sm:text-sm text-base-content/60 line-clamp-2 mb-4 leading-relaxed">{{ theme.description }}</p>
+                  <div class="flex gap-2 sm:gap-2.5">
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm" :style="{ background: theme.colors.gradeA }" title="A"></div>
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm" :style="{ background: theme.colors.gradeB }" title="B"></div>
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm" :style="{ background: theme.colors.gradeC }" title="C"></div>
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm" :style="{ background: theme.colors.gradeD }" title="D"></div>
+                    <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-sm" :style="{ background: theme.colors.gradeF }" title="F"></div>
+                  </div>
+                </div>
+                <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 sm:h-8 sm:w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
               </div>
-              <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
-          </button>
+            </button>
+          </div>
         </div>
       </div>
       <form method="dialog" class="modal-backdrop" @click="showSettingsModal = false">
