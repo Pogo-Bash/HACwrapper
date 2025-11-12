@@ -655,10 +655,10 @@ const calculatedAverage = computed(() => {
                     {{ originalAverage }}
                   </span>
                   <span class="text-2xl sm:text-3xl md:text-4xl text-primary-content">→</span>
-                  <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-success tabular-nums">
+                  <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-content tabular-nums">
                     {{ calculatedAverage }}
                   </span>
-                  <span class="badge badge-md md:badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
+                  <span class="badge badge-md md:badge-lg font-bold" :style="{ backgroundColor: parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'var(--color-primary)' : 'var(--color-error)', color: parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'var(--color-primaryContent)' : 'var(--color-surface)' }">
                     {{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) > '0' ? '+' : '' }}{{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) }}%
                   </span>
                 </div>
@@ -752,7 +752,7 @@ const calculatedAverage = computed(() => {
                       />
                       <span v-else class="text-sm md:text-base">{{ assignment.totalPoints }}</span>
                     </td>
-                    <td class="py-4 md:py-5 px-3 sm:px-4 text-center font-semibold tabular-nums text-sm md:text-base whitespace-nowrap" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-center font-semibold tabular-nums text-sm md:text-base whitespace-nowrap">
                       {{ assignment.percentage }}
                     </td>
                   </tr>
