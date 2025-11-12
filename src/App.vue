@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { themes, getTheme, applyTheme as applyThemeColors, getSavedTheme, saveTheme, type ThemeColors } from './themes'
+import Logo from './components/Logo.vue'
 
 interface Class {
   classId: string
@@ -429,7 +430,7 @@ const calculatedAverage = computed(() => {
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-3xl font-bold tracking-tight text-base-content">
-              HAC Wrapper
+              staHAC
             </h1>
             <p class="text-sm text-base-content/60 mt-2">Secure grade access, beautifully designed</p>
           </div>
@@ -459,7 +460,9 @@ const calculatedAverage = computed(() => {
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body p-8 md:p-10">
             <div class="text-center mb-8">
-              <div class="text-7xl mb-6">🎓</div>
+              <div class="flex justify-center mb-6">
+                <Logo :width="112" :height="112" :animated="true" />
+              </div>
               <h2 class="text-3xl font-bold tracking-tight mb-3">Login to HAC</h2>
               <p class="text-base text-base-content/60">Enter your credentials to view grades</p>
             </div>
@@ -705,27 +708,27 @@ const calculatedAverage = computed(() => {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               <span class="text-sm md:text-base">Edit scores to see grade impact. Changes are temporary.</span>
             </div>
-            <div class="overflow-x-auto -mx-4 sm:mx-0">
-              <table class="table table-zebra table-md md:table-lg">
+            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+              <table class="table table-zebra table-md md:table-lg w-full">
                 <thead>
                   <tr class="text-sm sm:text-base md:text-lg">
-                    <th class="py-4 md:py-5 hidden sm:table-cell">Due Date</th>
-                    <th class="py-4 md:py-5">Assignment</th>
-                    <th class="py-4 md:py-5 hidden lg:table-cell">Category</th>
-                    <th class="py-4 md:py-5 text-center">Score</th>
-                    <th class="py-4 md:py-5 text-center">Total</th>
-                    <th class="py-4 md:py-5 text-center">%</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 hidden sm:table-cell w-[100px]">Due Date</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 w-auto min-w-[140px]">Assignment</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 hidden lg:table-cell w-[120px]">Category</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 text-center w-[90px] sm:w-[110px]">Score</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 text-center w-[90px] sm:w-[110px]">Total</th>
+                    <th class="py-4 md:py-5 px-3 sm:px-4 text-center w-[80px] sm:w-[100px]">%</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(assignment, idx) in sortedAssignments" :key="editMode ? (assignment as any)._id : idx">
-                    <td class="py-4 md:py-5 text-sm hidden sm:table-cell">{{ assignment.dateDue }}</td>
-                    <td class="py-4 md:py-5 text-sm sm:text-base font-medium max-w-[140px] sm:max-w-none">
-                      <div class="truncate">{{ assignment.name }}</div>
-                      <div class="text-xs sm:hidden text-base-content/60 mt-1">{{ assignment.category }}</div>
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-sm hidden sm:table-cell whitespace-nowrap">{{ assignment.dateDue }}</td>
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-sm sm:text-base font-medium">
+                      <div class="truncate min-w-[140px] max-w-[200px] sm:max-w-none">{{ assignment.name }}</div>
+                      <div class="text-xs sm:hidden text-base-content/60 mt-1 truncate">{{ assignment.category }}</div>
                     </td>
-                    <td class="py-4 md:py-5 text-sm hidden lg:table-cell">{{ assignment.category }}</td>
-                    <td class="py-4 md:py-5 text-center tabular-nums">
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-sm hidden lg:table-cell">{{ assignment.category }}</td>
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-center tabular-nums whitespace-nowrap">
                       <input
                         v-if="editMode"
                         type="number"
@@ -737,7 +740,7 @@ const calculatedAverage = computed(() => {
                       />
                       <span v-else class="text-sm md:text-base">{{ assignment.score }}</span>
                     </td>
-                    <td class="py-4 md:py-5 text-center tabular-nums">
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-center tabular-nums whitespace-nowrap">
                       <input
                         v-if="editMode"
                         type="number"
@@ -749,7 +752,7 @@ const calculatedAverage = computed(() => {
                       />
                       <span v-else class="text-sm md:text-base">{{ assignment.totalPoints }}</span>
                     </td>
-                    <td class="py-4 md:py-5 text-center font-semibold tabular-nums text-sm md:text-base" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
+                    <td class="py-4 md:py-5 px-3 sm:px-4 text-center font-semibold tabular-nums text-sm md:text-base whitespace-nowrap" :class="editMode ? getGradeColor(parseFloat(assignment.percentage)) : ''">
                       {{ assignment.percentage }}
                     </td>
                   </tr>
