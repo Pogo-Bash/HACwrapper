@@ -177,6 +177,10 @@ async function viewClassDetails(className: string, markingPeriod: number = 1) {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = markingPeriod
 
+  // Reset edit mode when switching classes
+  editMode.value = false
+  editedAssignments.value = []
+
   if (!showClassModal.value || !originalClassName.value) {
     originalClassName.value = className
   }
@@ -239,6 +243,10 @@ function closeClassModal() {
   selectedClassDetails.value = null
   selectedMarkingPeriod.value = 1
   originalClassName.value = ''
+
+  // Reset edit mode when closing modal
+  editMode.value = false
+  editedAssignments.value = []
 }
 
 function logout() {
@@ -627,30 +635,30 @@ const calculatedAverage = computed(() => {
 
     <!-- Class Details Modal -->
     <div v-if="showClassModal" class="modal modal-open">
-      <div class="modal-box max-w-6xl p-8 md:p-10">
+      <div class="modal-box w-full h-full max-h-full md:max-w-6xl md:h-auto md:max-h-[90vh] p-4 sm:p-6 md:p-8 lg:p-10 m-0 md:m-4 rounded-none md:rounded-2xl overflow-y-auto">
         <!-- Modal Header -->
-        <div class="flex justify-between items-start mb-8">
-          <div>
-            <h3 class="text-3xl font-bold mb-2">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
-            <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-base text-base-content/60">
+        <div class="flex justify-between items-start mb-6 md:mb-8 sticky top-0 bg-base-100 z-10 pb-4 -mt-4 pt-4">
+          <div class="flex-1 min-w-0 mr-2">
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 md:mb-2 truncate">{{ selectedClassDetails?.className || 'Loading...' }}</h3>
+            <p v-if="selectedClassDetails && selectedClassDetails.teacher" class="text-sm md:text-base text-base-content/60 truncate">
               {{ selectedClassDetails.teacher }}
             </p>
           </div>
-          <button @click="closeClassModal" class="btn btn-ghost btn-circle btn-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          <button @click="closeClassModal" class="btn btn-ghost btn-circle btn-sm md:btn-lg flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
 
         <!-- Quarter Tabs -->
-        <div class="tabs tabs-boxed mb-8 p-2">
+        <div class="tabs tabs-boxed mb-6 md:mb-8 p-1 md:p-2 grid grid-cols-4 gap-1">
           <button
             v-for="mp in [1, 2, 3, 4]"
             :key="mp"
             @click="changeMarkingPeriod(mp)"
             :class="[
-              'tab tab-lg px-6 py-3 transition-all',
+              'tab text-sm md:text-base md:tab-lg px-2 sm:px-4 md:px-6 py-2 md:py-3 transition-all touch-manipulation',
               selectedMarkingPeriod === mp
-                ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg scale-105'
+                ? 'tab-active !bg-primary !text-primary-content font-bold shadow-lg md:scale-105'
                 : 'hover:bg-base-300'
             ]"
             :disabled="loadingDetails"
@@ -666,32 +674,32 @@ const calculatedAverage = computed(() => {
         </div>
 
         <!-- Class Details Content -->
-        <div v-else-if="selectedClassDetails" class="space-y-8">
+        <div v-else-if="selectedClassDetails" class="space-y-6 md:space-y-8">
           <!-- Average Card -->
           <div class="stats shadow-lg bg-primary w-full">
-            <div class="stat p-8">
-              <div class="stat-title text-primary-content/80 text-base mb-2">
+            <div class="stat p-4 sm:p-6 md:p-8">
+              <div class="stat-title text-primary-content/80 text-sm md:text-base mb-2">
                 Quarter {{ selectedMarkingPeriod }} Average
               </div>
-              <div class="stat-value text-primary-content text-6xl tabular-nums mb-2">
+              <div class="stat-value text-primary-content text-4xl sm:text-5xl md:text-6xl tabular-nums mb-2">
                 {{ selectedClassDetails.average }}
               </div>
-              <div v-if="editMode && calculatedAverage !== selectedClassDetails.average" class="mt-4">
-                <div class="text-primary-content/80 text-sm mb-1">What-If Scenario:</div>
-                <div class="flex items-center gap-3">
-                  <span class="text-3xl font-bold text-primary-content/60 line-through tabular-nums">
+              <div v-if="editMode && calculatedAverage !== selectedClassDetails.average" class="mt-3 md:mt-4">
+                <div class="text-primary-content/80 text-xs md:text-sm mb-1">What-If Scenario:</div>
+                <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                  <span class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-content/60 line-through tabular-nums">
                     {{ originalAverage }}
                   </span>
-                  <span class="text-4xl text-primary-content">→</span>
-                  <span class="text-4xl font-bold text-success tabular-nums">
+                  <span class="text-2xl sm:text-3xl md:text-4xl text-primary-content">→</span>
+                  <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-success tabular-nums">
                     {{ calculatedAverage }}
                   </span>
-                  <span class="badge badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
+                  <span class="badge badge-md md:badge-lg" :class="parseFloat(calculatedAverage) > parseFloat(originalAverage) ? 'badge-success' : 'badge-error'">
                     {{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) > '0' ? '+' : '' }}{{ (parseFloat(calculatedAverage) - parseFloat(originalAverage)).toFixed(2) }}%
                   </span>
                 </div>
               </div>
-              <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60 text-sm mt-2">
+              <div v-if="selectedClassDetails.lastUpdated" class="stat-desc text-primary-content/60 text-xs md:text-sm mt-2">
                 Last Updated: {{ selectedClassDetails.lastUpdated }}
               </div>
             </div>
