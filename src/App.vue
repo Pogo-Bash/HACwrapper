@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { themes, getTheme, applyTheme as applyThemeColors, getSavedTheme, saveTheme, type ThemeColors } from './themes'
 
 interface Class {
   classId: string
@@ -57,35 +58,32 @@ const showClassModal = ref(false)
 const selectedMarkingPeriod = ref(1)
 const originalClassName = ref('')
 const displayClassName = ref('')
-const darkMode = ref(false)
+const showSettingsModal = ref(false)
+const currentThemeName = ref(getSavedTheme())
 const assignmentSortBy = ref<'date' | 'grade-low' | 'grade-high' | 'alpha'>('date')
 const editMode = ref(false)
 const editedAssignments = ref<Assignment[]>([])
 const originalAverage = ref<string>('')
 
 onMounted(async () => {
-  const savedTheme = localStorage.getItem('theme')
-  darkMode.value = savedTheme === 'dark'
-  applyTheme()
+  // Apply saved theme
+  const themeName = getSavedTheme()
+  const theme = getTheme(themeName)
+  if (theme) {
+    applyThemeColors(theme)
+    currentThemeName.value = themeName
+  }
 
   const savedUsername = localStorage.getItem('hacUsername')
   if (savedUsername) username.value = savedUsername
 })
 
-function toggleDarkMode() {
-  darkMode.value = !darkMode.value
-  localStorage.setItem('theme', darkMode.value ? 'dark' : 'light')
-  applyTheme()
-}
-
-function applyTheme() {
-  const html = document.documentElement
-  if (darkMode.value) {
-    html.setAttribute('data-theme', 'dark')
-    html.classList.add('dark')
-  } else {
-    html.setAttribute('data-theme', 'light')
-    html.classList.remove('dark')
+function changeTheme(themeName: string) {
+  const theme = getTheme(themeName)
+  if (theme) {
+    applyThemeColors(theme)
+    saveTheme(themeName)
+    currentThemeName.value = themeName
   }
 }
 
@@ -435,23 +433,21 @@ const calculatedAverage = computed(() => {
             </h1>
             <p class="text-sm text-base-content/60 mt-2">Secure grade access, beautifully designed</p>
           </div>
-          <div class="flex items-center gap-4">
-            <!-- Theme Toggle -->
-            <label class="swap swap-rotate btn btn-ghost btn-circle btn-lg">
-              <input type="checkbox" :checked="darkMode" @change="toggleDarkMode" />
-              <svg class="swap-off fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/></svg>
-              <svg class="swap-on fill-current w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/></svg>
-            </label>
+          <div class="flex items-center gap-2 sm:gap-4">
+            <button
+              @click="showSettingsModal = true"
+              class="btn btn-ghost btn-circle btn-sm sm:btn-md"
+              title="Theme Settings"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
 
-            <div v-if="isLoggedIn" class="flex items-center gap-4">
-              <div class="text-right hidden sm:block">
-                <p class="text-xs text-base-content/60">Logged in as</p>
-                <p class="font-semibold text-sm mt-1">{{ studentName }}</p>
-              </div>
-              <button @click="logout" class="btn btn-ghost btn-sm px-6 py-2">
-                Logout
-              </button>
-            </div>
+            <button v-if="isLoggedIn" @click="logout" class="btn btn-ghost btn-sm px-4 sm:px-6 py-2">
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -531,46 +527,7 @@ const calculatedAverage = computed(() => {
       </div>
 
       <!-- Dashboard -->
-      <div v-else class="space-y-12">
-        <!-- Welcome Card -->
-        <div class="card bg-primary shadow-xl">
-          <div class="card-body p-8 md:p-10">
-            <h2 class="text-4xl md:text-5xl font-bold text-primary-content mb-4 tracking-tight">
-              Welcome back, {{ studentName }}! 👋
-            </h2>
-            <p class="text-lg text-primary-content/80">Here's your academic overview</p>
-          </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          <div class="stats shadow-lg bg-base-100">
-            <div class="stat p-6 md:p-8">
-              <div class="stat-figure text-5xl mb-4">📊</div>
-              <div class="stat-title text-base mb-3">Unweighted GPA</div>
-              <div class="stat-value text-5xl tabular-nums">{{ calculateUnweightedGPA() }}</div>
-              <div class="stat-desc text-sm mt-2">Out of 4.0</div>
-            </div>
-          </div>
-
-          <div class="stats shadow-lg bg-base-100">
-            <div class="stat p-6 md:p-8">
-              <div class="stat-figure text-5xl mb-4">⭐</div>
-              <div class="stat-title text-base mb-3">Weighted GPA</div>
-              <div class="stat-value text-5xl tabular-nums">{{ calculateWeightedGPA() }}</div>
-              <div class="stat-desc text-sm mt-2">Out of 5.0 (H/AP)</div>
-            </div>
-          </div>
-
-          <div class="stats shadow-lg bg-base-100">
-            <div class="stat p-6 md:p-8">
-              <div class="stat-figure text-5xl mb-4">✅</div>
-              <div class="stat-title text-base mb-3">Graded Classes</div>
-              <div class="stat-value text-5xl tabular-nums">{{ classes.filter(c => c.hasGrade).length }}</div>
-            </div>
-          </div>
-        </div>
-
+      <div v-else class="space-y-8">
         <!-- Classes Grid -->
         <div>
           <h3 class="text-2xl font-semibold mb-8">Your Classes</h3>
@@ -711,24 +668,24 @@ const calculatedAverage = computed(() => {
 
           <!-- Assignments Table -->
           <div v-if="selectedClassDetails.assignments && selectedClassDetails.assignments.length > 0">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6 gap-3 md:gap-4">
-              <h4 class="font-bold text-lg md:text-xl">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
-              <div class="flex flex-col sm:flex-row gap-2 md:gap-3 w-full sm:w-auto">
-                <div class="form-control w-full sm:w-auto">
-                  <label class="label pb-1 hidden sm:block">
-                    <span class="label-text text-sm font-medium">Sort by:</span>
+            <div class="mb-6">
+              <h4 class="font-bold text-lg md:text-xl mb-4">Assignments ({{ selectedClassDetails.assignments.length }})</h4>
+              <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+                <div class="form-control flex-1 sm:flex-initial sm:min-w-[200px]">
+                  <label class="label pb-2">
+                    <span class="label-text text-sm font-medium">Sort by</span>
                   </label>
-                  <select v-model="assignmentSortBy" class="select select-bordered select-sm w-full sm:w-auto touch-manipulation">
+                  <select v-model="assignmentSortBy" class="select select-bordered w-full touch-manipulation">
                     <option value="date">Date (Newest)</option>
                     <option value="grade-low">Grade (Low→High)</option>
                     <option value="grade-high">Grade (High→Low)</option>
                     <option value="alpha">A-Z</option>
                   </select>
                 </div>
-                <div class="flex gap-2 w-full sm:w-auto">
+                <div class="flex gap-3 flex-1 sm:flex-initial">
                   <button
                     @click="toggleEditMode"
-                    :class="['btn btn-sm flex-1 sm:flex-none touch-manipulation', editMode ? 'btn-success' : 'btn-outline']"
+                    :class="['btn flex-1 sm:flex-initial touch-manipulation', editMode ? 'btn-success' : 'btn-outline']"
                   >
                     <span class="hidden sm:inline">{{ editMode ? '✓ Edit Mode Active' : '✏️ Edit Mode' }}</span>
                     <span class="sm:hidden">{{ editMode ? '✓ Active' : '✏️ Edit' }}</span>
@@ -736,7 +693,7 @@ const calculatedAverage = computed(() => {
                   <button
                     v-if="editMode"
                     @click="resetEditedGrades"
-                    class="btn btn-sm btn-ghost touch-manipulation"
+                    class="btn btn-ghost touch-manipulation"
                     title="Reset to original grades"
                   >
                     ↺ <span class="hidden sm:inline">Reset</span>
@@ -831,5 +788,234 @@ const calculatedAverage = computed(() => {
         <button>close</button>
       </form>
     </div>
+
+    <!-- Settings Modal -->
+    <div v-if="showSettingsModal" class="modal modal-open">
+      <div class="modal-box max-w-2xl">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">Theme Settings</h3>
+          <button @click="showSettingsModal = false" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <p class="text-base-content/60 mb-6">Choose from 8 beautiful pastel themes</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            v-for="theme in themes"
+            :key="theme.name"
+            @click="changeTheme(theme.name); showSettingsModal = false"
+            :class="[
+              'card bg-base-100 border-2 p-4 text-left transition-all hover:shadow-lg',
+              currentThemeName === theme.name ? 'border-primary shadow-lg' : 'border-base-300'
+            ]"
+          >
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0 w-12 h-12 rounded-lg" :style="{ background: theme.colors.primary }"></div>
+              <div class="flex-1 min-w-0">
+                <h4 class="font-semibold text-base mb-1">{{ theme.name }}</h4>
+                <p class="text-xs text-base-content/60 line-clamp-2">{{ theme.description }}</p>
+                <div class="flex gap-1 mt-2">
+                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeA }"></div>
+                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeB }"></div>
+                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeC }"></div>
+                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeD }"></div>
+                  <div class="w-4 h-4 rounded-full" :style="{ background: theme.colors.gradeF }"></div>
+                </div>
+              </div>
+              <div v-if="currentThemeName === theme.name" class="flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop" @click="showSettingsModal = false">
+        <button>close</button>
+      </form>
+    </div>
   </div>
 </template>
+
+<style scoped>
+/* Apply theme colors using CSS variables */
+:global(body) {
+  background-color: var(--color-background);
+  color: var(--color-textPrimary);
+}
+
+:global(.bg-neutral) {
+  background-color: var(--color-background) !important;
+}
+
+:global(.bg-base-100) {
+  background-color: var(--color-surface) !important;
+}
+
+:global(.bg-base-200) {
+  background-color: var(--color-surface) !important;
+  opacity: 0.8;
+}
+
+:global(.bg-primary) {
+  background-color: var(--color-primary) !important;
+}
+
+:global(.bg-success) {
+  background-color: var(--color-success) !important;
+}
+
+:global(.text-base-content) {
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.text-base-content\/60) {
+  color: var(--color-textSecondary) !important;
+}
+
+:global(.text-base-content\/40) {
+  color: var(--color-textMuted) !important;
+}
+
+:global(.text-primary-content) {
+  color: var(--color-primaryContent) !important;
+}
+
+:global(.text-primary-content\/80) {
+  color: var(--color-primaryContent) !important;
+  opacity: 0.8;
+}
+
+:global(.text-primary-content\/60) {
+  color: var(--color-primaryContent) !important;
+  opacity: 0.6;
+}
+
+:global(.text-success) {
+  color: var(--color-gradeA) !important;
+}
+
+:global(.text-info) {
+  color: var(--color-gradeB) !important;
+}
+
+:global(.text-warning) {
+  color: var(--color-gradeC) !important;
+}
+
+:global(.text-error) {
+  color: var(--color-gradeF) !important;
+}
+
+:global(.text-primary) {
+  color: var(--color-primary) !important;
+}
+
+:global(.border-base-300) {
+  border-color: var(--color-border) !important;
+}
+
+:global(.border-base-200) {
+  border-color: var(--color-border) !important;
+}
+
+:global(.input) {
+  background-color: var(--color-inputBg) !important;
+  border-color: var(--color-inputBorder) !important;
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.input:focus) {
+  border-color: var(--color-inputFocus) !important;
+  outline-color: var(--color-inputFocus) !important;
+}
+
+:global(.select) {
+  background-color: var(--color-inputBg) !important;
+  border-color: var(--color-inputBorder) !important;
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.select:focus) {
+  border-color: var(--color-inputFocus) !important;
+  outline-color: var(--color-inputFocus) !important;
+}
+
+:global(.btn-primary) {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primaryContent) !important;
+}
+
+:global(.btn-primary:hover) {
+  background-color: var(--color-primaryHover) !important;
+  border-color: var(--color-primaryHover) !important;
+}
+
+:global(.btn-outline) {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+:global(.btn-outline:hover) {
+  background-color: var(--color-primary) !important;
+  color: var(--color-primaryContent) !important;
+}
+
+:global(.btn-success) {
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.badge-success) {
+  background-color: var(--color-success) !important;
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.badge-error) {
+  background-color: var(--color-error) !important;
+  color: var(--color-surface) !important;
+}
+
+:global(.badge-info) {
+  background-color: var(--color-info) !important;
+  color: var(--color-textPrimary) !important;
+}
+
+:global(.alert-info) {
+  background-color: var(--color-info) !important;
+  color: var(--color-textPrimary) !important;
+  opacity: 0.9;
+}
+
+:global(.card) {
+  background-color: var(--color-surface) !important;
+  border-color: var(--color-border) !important;
+}
+
+:global(.card:hover) {
+  background-color: var(--color-surfaceHover) !important;
+}
+
+:global(.modal-backdrop) {
+  background-color: var(--color-modalBackdrop) !important;
+}
+
+:global(.tab) {
+  background-color: var(--color-tabInactive) !important;
+  color: var(--color-textSecondary) !important;
+}
+
+:global(.tab-active) {
+  background-color: var(--color-tabActive) !important;
+  color: var(--color-primaryContent) !important;
+}
+
+:global(.progress) {
+  background-color: var(--color-progressBar) !important;
+}
+</style>
