@@ -350,10 +350,25 @@ function toggleEditMode() {
 
   if (editMode.value) {
     // Entering edit mode - create a deep copy of assignments with unique IDs
-    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value?.assignments || [])).map((a: Assignment, idx: number) => ({
-      ...a,
-      _id: idx // Add unique ID for tracking
-    }))
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value?.assignments || [])).map((a: Assignment, idx: number) => {
+      // Convert empty or missing scores to "X" for excused
+      const score = (!a.score || a.score.trim() === '' || (a.score === '0' && a.percentage === '0.00')) ? 'X' : a.score
+      const totalPoints = (!a.totalPoints || a.totalPoints.trim() === '') ? 'X' : a.totalPoints
+
+      // Calculate percentage based on scores
+      let percentage = a.percentage
+      if (score === 'X' || totalPoints === 'X') {
+        percentage = 'X'
+      }
+
+      return {
+        ...a,
+        _id: idx, // Add unique ID for tracking
+        score,
+        totalPoints,
+        percentage
+      }
+    })
     originalAverage.value = selectedClassDetails.value?.average || '0'
   } else {
     // Exiting edit mode - clear edited data
@@ -363,10 +378,25 @@ function toggleEditMode() {
 
 function resetEditedGrades() {
   if (selectedClassDetails.value?.assignments) {
-    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value.assignments)).map((a: Assignment, idx: number) => ({
-      ...a,
-      _id: idx
-    }))
+    editedAssignments.value = JSON.parse(JSON.stringify(selectedClassDetails.value.assignments)).map((a: Assignment, idx: number) => {
+      // Convert empty or missing scores to "X" for excused
+      const score = (!a.score || a.score.trim() === '' || (a.score === '0' && a.percentage === '0.00')) ? 'X' : a.score
+      const totalPoints = (!a.totalPoints || a.totalPoints.trim() === '') ? 'X' : a.totalPoints
+
+      // Calculate percentage based on scores
+      let percentage = a.percentage
+      if (score === 'X' || totalPoints === 'X') {
+        percentage = 'X'
+      }
+
+      return {
+        ...a,
+        _id: idx,
+        score,
+        totalPoints,
+        percentage
+      }
+    })
     originalAverage.value = selectedClassDetails.value.average || '0'
   }
 }
@@ -376,13 +406,22 @@ function updateAssignmentGrade(assignmentId: number, field: 'score' | 'totalPoin
   const assignment = editedAssignments.value.find((a: any) => a._id === assignmentId)
 
   if (assignment) {
-    assignment[field] = value
+    // Allow empty string, "X", or numbers
+    assignment[field] = value.trim() === '' ? 'X' : value
 
     // Recalculate percentage for this assignment
-    const score = parseFloat(assignment.score) || 0
-    const total = parseFloat(assignment.totalPoints) || 1
-    const percentage = total > 0 ? ((score / total) * 100).toFixed(2) : '0.00'
-    assignment.percentage = percentage
+    const scoreStr = assignment.score.toUpperCase()
+    const totalStr = assignment.totalPoints.toUpperCase()
+
+    // If either is "X" (excused), mark as excused
+    if (scoreStr === 'X' || totalStr === 'X') {
+      assignment.percentage = 'X'
+    } else {
+      const score = parseFloat(assignment.score) || 0
+      const total = parseFloat(assignment.totalPoints) || 1
+      const percentage = total > 0 ? ((score / total) * 100).toFixed(2) : '0.00'
+      assignment.percentage = percentage
+    }
   }
 }
 
@@ -395,6 +434,14 @@ const calculatedAverage = computed(() => {
   const categoriesByName: { [key: string]: { points: number, maxPoints: number, weight: number } } = {}
 
   editedAssignments.value.forEach(assignment => {
+    // Skip excused assignments (marked with "X")
+    const scoreStr = String(assignment.score).toUpperCase()
+    const totalStr = String(assignment.totalPoints).toUpperCase()
+
+    if (scoreStr === 'X' || totalStr === 'X') {
+      return // Skip this assignment in calculations
+    }
+
     const category = assignment.category
     const score = parseFloat(assignment.score) || 0
     const total = parseFloat(assignment.totalPoints) || 0
@@ -731,24 +778,24 @@ const calculatedAverage = computed(() => {
                     <td class="py-4 md:py-5 px-3 sm:px-4 text-center tabular-nums whitespace-nowrap">
                       <input
                         v-if="editMode"
-                        type="number"
-                        step="0.01"
-                        inputmode="decimal"
+                        type="text"
+                        inputmode="text"
+                        placeholder="X"
                         :value="assignment.score"
                         @input="updateAssignmentGrade((assignment as any)._id, 'score', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px]"
+                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px] font-semibold"
                       />
                       <span v-else class="text-sm md:text-base">{{ assignment.score }}</span>
                     </td>
                     <td class="py-4 md:py-5 px-3 sm:px-4 text-center tabular-nums whitespace-nowrap">
                       <input
                         v-if="editMode"
-                        type="number"
-                        step="0.01"
-                        inputmode="decimal"
+                        type="text"
+                        inputmode="text"
+                        placeholder="X"
                         :value="assignment.totalPoints"
                         @input="updateAssignmentGrade((assignment as any)._id, 'totalPoints', ($event.target as HTMLInputElement).value)"
-                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px]"
+                        class="input input-bordered input-sm md:input-md w-16 sm:w-20 md:w-24 text-center touch-manipulation text-sm md:text-base min-h-[44px] font-semibold"
                       />
                       <span v-else class="text-sm md:text-base">{{ assignment.totalPoints }}</span>
                     </td>
